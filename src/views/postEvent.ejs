@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>post-Event-create</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/css/menu.css">
+	<link rel="stylesheet" type="text/css" href="/css/style.css">
+	<script>
+		var validatePostName,
+			invalidPost,
+			checkProfileURL = true,
+			checkProfileImage,
+			attachProfile,
+			invalidDesc,
+			checkWebURL = true,
+			CheckGalleryImage = true,
+			checkPostalCode,
+			invalidPostal,
+			checkStartDateTime,
+			checkEndDateTime,
+			invalidDateTime,
+			popUpWarning = false;
+		$(document).ready(function () {
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+	</script>
+</head>
+<% var current= 'account', outputGal = [] %>
+<%- include ./partials/head  %>
+
+<form action="/create-post/<%= userId %>" style="margin-left: 400px; margin-right: 400px" method="POST" id="cprfForm"
+	enctype="multipart/form-data" onsubmit="return ValidationEvent()">
+	<input type="hidden" name="userId" value="<%=userId%>">
+
+	<div class="account-create-div">
+		<a href="/account/<%= userId %>" class="account-create" href="">
+			<h4>Cancel</h4>
+		</a>
+	</div>
+	<h3>Create an Event Post</h3>
+	<div class="form-group">
+		<label for="name"><b>Post Name * : </b></label>
+		<input type="text" class="form-control input-size" placeholder="Enter post name" id="postName"
+			onchange='Javascript:ValidatePostName()' name="Name" required oninvalid="InvalidPost(this);"
+			oninput="InvalidPost(this);" autocomplete="off">
+		<p class="error-message" id="postError"></p>
+		<script>
+			function ValidatePostName() {
+				popUpWarning = true;
+				document.getElementById("postError").innerHTML = "";
+				// var name = /^[a-zA-Z-,]+(\s{0,1}[a-zA-Z-, ])*$/;
+				var text = document.getElementById("postName");
+				// if (!name.test(text.value)) {
+				if (!text) {
+				document.getElementById("postError").innerHTML =
+					"Invalid characters found in the Training post name ";
+				text.style = "box-shadow: 0 0 5px 1px red";
+				validatePostName = false;
+				return false;
+				} else {
+				text.setCustomValidity("");
+				text.style = "box-shadow: none";
+				validatePostName = true;
+				return true;
+				}
+			}
+			function InvalidPost(textbox) {
+				if (textbox.value === "") {
+				textbox.setCustomValidity("Required Post Name");
+				textbox.style = "box-shadow: 0 0 5px 1px red";
+				invalidPost = false;
+				return false;
+				} else {
+				textbox.setCustomValidity("");
+				textbox.style = "box-shadow: none";
+				invalidPost = true;
+				return true;
+				}
+			}
+		</script>
+	</div>
+	<div class="form-group">
+		<label for="event links"><b>Event URL</b></label>
+		<input type="text" class="form-control" name="EventUrl" placeholder="https://www.url.com" id="eventUrlCheck"
+			onchange='Javascript:CheckProfileURL();' autocomplete="off">
+		<p id="urlError" class="error-message"></p>
+		<script>
+			function CheckProfileURL() {
+				popUpWarning = true;
+				document.getElementById("urlError").innerHTML = "";
+				var url = document.getElementById('eventUrlCheck');
+				var filter = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+				if (!filter.test(url.value)) {
+					document.getElementById("urlError").innerHTML = "Please enter valid profile URL";
+					document.getElementById("eventUrlCheck").style = "box-shadow: 0 0 5px 1px red";
+					checkProfileURL = false;
+					return false;
+				}else{
+					document.getElementById("eventUrlCheck").style = "box-shadow: none";
+					checkProfileURL = true;
+					return true;
+				}
+			}
+		</script>
+	</div>
+	<div class="form-group">
+		<div class="card" style=" border: 1px solid silver;border-radius: 5px;padding:5px">
+			<label for="Image" style="width:50%;"><b>Event Post Image * <img
+						src="https://img.icons8.com/ios/20/000000/about-filled.png" data-toggle="tooltip"
+						title="Image Size should be MAX(400X400 pixels)!"></b></label>
+			<div style="background-color: #c3bbbb;float: right;">
+				<img id="output" height="50" />
+			</div>
+			<input type="file" name="image" id="postimage" onchange="Javascript:CheckProfileImage(event);" required
+				oninvalid="InvalidFile(this);" oninput="InvalidFile(this);" />
+			<p id="fileError" class="error-message"></p>
+			<script>
+				function CheckProfileImage(event) {
+					popUpWarning = true;
+					var output = document.getElementById("output");
+					output.src = URL.createObjectURL(event.target.files[0]);
+					document.getElementById("fileError").innerHTML = "";
+					var file = document.getElementById("postimage");
+					var filter = /\.(jpe?g|png|gif|bmp|svg)$/i;
+					if (!filter.test(file.value)) {
+						document.getElementById("fileError").innerHTML =
+						"Please select a valid image or file";
+						file.style = "box-shadow: 0 0 5px 1px red";
+						checkProfileImage = false;
+						return false;
+					} else {
+						file.setCustomValidity("");
+						file.style = "box-shadow: none";
+
+						output.onload = function () {
+							var height = this.naturalHeight;
+							var width = this.naturalWidth;
+							if (height > 400 && width > 400) {
+							document.getElementById("fileError").innerHTML =
+								"Uploaded Group Icon should be MAX(400x400 pixels)";
+							file.style = "box-shadow: 0 0 5px 1px red";
+							checkProfileImage = false;
+							return false;
+							} else {
+							file.setCustomValidity("");
+							file.style = "box-shadow: none";
+							checkProfileImage = true;
+							return true;
+							}
+						};
+					}
+					}
+					function InvalidFile(file) {
+						if (file.value === "") {
+							file.setCustomValidity("Required Postal code");
+							file.style = "box-shadow: 0 0 5px 1px red";
+							invalidFile = false;
+							return false;
+						} else {
+							file.setCustomValidity("");
+							file.style = "box-shadow: none";
+							invalidFile = true;
+							return true;
+						}
+					}
+			</script>
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="profile links"><b>Attach a Profile * </b></label>
+		<select class="form-control" id="attach_profile" name="AttachedProfileLink" required 
+		oninvalid="AttachProfile(this);" oninput="AttachProfile(this);" onchange="popUpWarning = true;">
+			<option value="">----Select Profile----</option>
+			<% if(profiles && profiles.length >= 0) { 
+				profiles.forEach( p => { 
+					if(p.name !== null) { 
+						if(p.ssgroupId > 0){
+						groups.forEach(group=>{							
+							if(p.ssgroupId == group.id){ %> 
+				<option value="<%= p.id %>"><%= p.name %> - <%=group.name %></option>
+				<% } }); }else{  %> 
+					<option value="<%= p.id %>"><%= p.name %></option>
+				<% }  } });
+			 } else { %>
+			<input type="text" placeholder="Profile" class="form-control" name="ServiceProfileLink">
+			<% } %>
+		</select>
+		<script>
+			function AttachProfile(profile) {
+				if (profile.value === "") {
+					profile.setCustomValidity("Select the profile");
+					profile.style = "box-shadow: 0 0 5px 1px red";
+					attachProfile = false;
+					return false;
+				} else {
+					profile.setCustomValidity("");
+					profile.style = "box-shadow: none";
+					attachProfile = true;
+					return true;
+				}
+			}
+		  </script>
+	</div>
+	<div class="form-group">
+		<label for="name"><b>Description * </b></label>
+		<textarea type="text" name="PDesc" class="form-control" id="post_description" placeholder="Enter Post Description" cols="40" rows="5"
+			required oninvalid="InvalidDesc(this);" oninput="InvalidDesc(this);"
+			onchange="popUpWarning = true;" autocomplete="off"></textarea>
+		<script>
+			function InvalidDesc(desc) {
+				if (desc.value === "") {
+				desc.setCustomValidity("Required Description");
+				desc.style = "box-shadow: 0 0 5px 1px red";
+				invalidDesc = false;
+				return false;
+				} else {
+				desc.setCustomValidity("");
+				desc.style = "box-shadow: none";
+				invalidDesc = true;
+				return true;
+				}
+			}
+		</script>
+	</div>
+	<div class="form-group">
+		<label for="event links"><b>Webpage</b></label>
+		<input type="text" class="form-control" name="WebpageUrl" placeholder="https://www.url.com" id="webUrlCheck"
+			onchange='Javascript:CheckWebURL();' autocomplete="off">
+		<p id="weburlError" class="error-message"></p>
+		<script>
+			function CheckWebURL() {
+				popUpWarning = true;
+				document.getElementById("weburlError").innerHTML = "";
+				var url = document.getElementById('webUrlCheck');
+				var filter = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+				if (!filter.test(url.value)) {
+					url.style = "box-shadow: 0 0 5px 1px red";
+					document.getElementById("weburlError").innerHTML = "Please Enter valid Web URL";
+					checkWebURL = false;
+					return false;
+				}else{
+					url.style = "box-shadow: none";
+					checkWebURL = true;
+					return true;
+				}
+			}
+		</script>
+	</div>
+	<div class="form-group">
+		<label for="event links"><b>Link to reserve tickets</b></label>
+		<input type="text" class="form-control" name="ReserveticketsUrl" placeholder="https://www.url.com"
+			id="ticketUrlCheck" onchange='Javascript:checkTicketURL();' autocomplete="off">
+		<p id="ticketUrlError" class="error-message"></p>
+		<script>
+			function checkTicketURL() {
+				popUpWarning = true;
+				document.getElementById("ticketUrlError").innerHTML = "";
+				var url = document.getElementById('ticketUrlCheck');
+				var filter = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+				if (!filter.test(url.value)) {
+					url.style = "box-shadow: 0 0 5px 1px red";
+					document.getElementById("ticketUrlError").innerHTML = "Please enter valid reserve ticket link";
+					checkTicketURL = false;
+					return false;
+				}else{
+					url.style = "box-shadow: none";
+					checkTicketURL = true;
+					return true;
+				}
+			}
+		</script>
+	</div>
+	<div class="form-group">
+		<div class="card" style=" border: 1px solid silver;border-radius: 5px;padding:5px">
+			<label for="Image" style="width:50%;"><b>Add Photos. <img
+						src="https://img.icons8.com/ios/20/000000/about-filled.png" data-toggle="tooltip"
+						title="Image Size should be MIN(335x600 pixels) and MAX(675x1200)!"></b></label>
+			<div style="background-color: #c3bbbb;float: right;">
+				<% if(outputGal && outputGal.length >= 0) { 
+						outputGal.forEach( gal => { %>
+				<img id="outputGallery" src="<%= gal %>" height="50" />
+				<% }); } %>
+			</div>
+			<input type="file" name="gallery" id="gallery" multiple onchange="Javascript:CheckGalleryImage(event);"
+				oninvalid="InvalidFile(this);" oninput="InvalidFile(this);" />
+			<p id="fileError_gallery" class="error-message"></p>
+			<script>
+				function CheckGalleryImage(event) {
+					popUpWarning = true;
+					document.getElementById("fileError_gallery").innerHTML = "";
+					var file = document.getElementById("gallery");
+					var filter = /\.(jpe?g|png|gif|bmp|svg)$/i;
+					if (!filter.test(file.value)) {
+						document.getElementById("fileError_gallery").innerHTML =
+						"Please select a valid image or file";
+						file.style = "box-shadow: 0 0 5px 1px red";
+						checkGalleryImage = false;
+						return false;
+					} else {
+						file.setCustomValidity("");
+						file.style = "box-shadow: none";
+					}
+					var fileLists = event.target.files;
+					var checkCount = 0;
+					Array.from(fileLists).forEach(item => {
+						var image = new Image();
+						image.src = URL.createObjectURL(item);
+						image.onload = function () {
+						var height = this.naturalHeight;
+						var width = this.naturalWidth;
+						if ((height < 335 || height > 675) && (width < 600 || width > 1200)) {
+							checkCount++;
+						}
+						if (checkCount > 0) {
+							document.getElementById("fileError_gallery").innerHTML =
+							"Uploaded Gallery image should be MIN(335x600 pixels) and MAX(675x1200)";
+							file.style = "box-shadow: 0 0 5px 1px red";
+							checkGalleryImage = false;
+							return false;
+						} else {
+							file.setCustomValidity("");
+							file.style = "box-shadow: none";
+							checkGalleryImage = true;
+							return true;
+						}
+						};
+					});
+				}
+			</script>
+		</div>
+	</div>
+	<h4>Location:</h4>	
+	<div class="form-group col-md-6">
+		<label for="inputAddress">Address</label>
+		<input type="text" class="form-control" id="address" name="Addresss" placeholder="1234 Main St"
+		onchange="popUpWarning = true;" autocomplete="off">
+	</div>
+	<div class="form-group col-md-6">
+		<label for="inputAddress2">Address 2</label>
+		<input type="text" class="form-control" id="address2" name="Addresss2" placeholder="Apartment, studio, or floor"
+		onchange="popUpWarning = true;" autocomplete="off">
+	</div>
+	<div class="form-row">
+		<div class="form-group col-md-4">
+			<label for="inputCity">City</label>
+			<input type="text" class="form-control" id="city" name="City" placeholder="Enter City"
+			onchange="popUpWarning = true;" autocomplete="off">
+		</div>
+		<div class="form-group col-md-4">
+			<label for="inputState">Province</label>
+			<input type="text" class="form-control" id="province" name="Province" placeholder="Enter Province"
+			onchange="popUpWarning = true;" autocomplete="off">
+		</div>
+		<div class="form-group col-md-4">
+			<label for="inputCountry">Country</label>
+			<input type="text" class="form-control" id="country" name="Country" placeholder="Country"
+			onchange="popUpWarning = true;" autocomplete="off">
+		</div>
+	</div>
+		<div class="form-group">
+			<label for="files"><b>Postal Code *</b></label>
+			<input type="text" class="form-control" name="PostalCode" id="postalcodecheck"
+				onchange='Javascript:CheckPostalCode();' required oninvalid="InvalidPostal(this);"
+				oninput="InvalidPostal(this);" autocomplete="off">
+			<p id="codeError" class="error-message"></p>
+			<script>
+				function CheckPostalCode() {
+					popUpWarning = true;
+					document.getElementById("codeError").innerHTML = "";
+					var code = document.getElementById("postalcodecheck");
+					var filter = /^\d{5}-\d{4}|\d{5}|[A-Z]\d[A-Z] \d[A-Z]\d|[0-9]{6}|[A-Za-z]{1,2}[\d]{1,2}([A-Za-z])?\s?[\d][A-Za-z]{2}$/;
+					if (!filter.test(code.value)) {
+					document.getElementById("codeError").innerHTML =
+						"Please enter valid Postal Code";
+					code.style = "box-shadow: 0 0 5px 1px red";
+					checkPostalCode = false;
+					return false;
+					} else {
+					code.setCustomValidity("");
+					code.style = "box-shadow: none";
+					checkPostalCode = true;
+					return true;
+					}
+				}
+				function InvalidPostal(textbox) {
+					if (textbox.value === "") {
+					textbox.setCustomValidity("Required Postal code");
+					textbox.style = "box-shadow: 0 0 5px 1px red";
+					invalidPostal = false;
+					return false;
+					} else {
+					textbox.setCustomValidity("");
+					textbox.style = "box-shadow: none";
+					invalidPostal = true;
+					return true;
+					}
+				}
+			</script>		
+	</div>
+	<div class="form-group">
+		<label for="desc"><b>Promotion Duration * (FORMAT : 01-01-2000 12:12 AM)</b></label>
+		<p>Starts <input type="datetime-local" class="form-control" id="promotionDurationStart" name="FromDate" oninvalid="InvalidDateTime(this);"
+				oninput="InvalidDateTime(this);" required onchange="Javascript:CheckStartDateTime(this);"/>
+		</p>
+		<p>Ends <input type="datetime-local" class="form-control" id="promotionDurationEnd" name="ToDate" oninvalid="InvalidDateTime(this);"
+				oninput="InvalidDateTime(this);" required onchange="Javascript:CheckEndDateTime(this);"/>
+		</p>
+		<script>
+			function CheckStartDateTime(dateTimeVal){
+				popUpWarning = true;
+				var curDateTime = new Date(dateTimeVal.value);
+			
+				if (!(isNaN(curDateTime.getDate())) === false){
+				dateTimeVal.setCustomValidity("Required Post date and time. (FORMAT : 01-01-2000 12:12 AM)");
+				dateTimeVal.style = "box-shadow: 0 0 5px 1px red";
+				checkStartDateTime = false;
+				return false;
+				} else {
+				dateTimeVal.setCustomValidity("");
+				dateTimeVal.style = "box-shadow: none";
+				checkStartDateTime = true;
+				return true;
+				}
+			}
+			function CheckEndDateTime(dateTimeVal){
+				popUpWarning = true;
+				var curDateTime = new Date(dateTimeVal.value);
+			
+				if (!(isNaN(curDateTime.getDate())) === false){
+				dateTimeVal.setCustomValidity("Required Post date and time. (FORMAT : 01-01-2000 12:12 AM)");
+				dateTimeVal.style = "box-shadow: 0 0 5px 1px red";
+				checkEndDateTime = false;
+				return false;
+				} else {
+				dateTimeVal.setCustomValidity("");
+				dateTimeVal.style = "box-shadow: none";
+				checkEndDateTime = true;
+				return true;
+				}
+			}
+			function InvalidDateTime(dateTime) {
+				var curDateTime = new Date(dateTime.value);
+
+				if (dateTime.value === "") {
+				dateTime.setCustomValidity(
+					"Required Post date and time. (FORMAT : 01-01-2000 12:12 AM)"
+				);
+				dateTime.style = "box-shadow: 0 0 5px 1px red";
+				invalidDateTime = false;
+				return false;
+				}else if (!(isNaN(curDateTime.getDate())) === false){
+				dateTime.setCustomValidity("Required Post date and time. (FORMAT : 01-01-2000 12:12 AM)");
+				dateTime.style = "box-shadow: 0 0 5px 1px red";
+				invalidDateTime = false;
+				return false;
+				}  else {
+				dateTime.setCustomValidity("");
+				dateTime.style = "box-shadow: none";
+				invalidDateTime = true;
+				return true;
+				}
+			}
+		</script>
+	</div>
+	<div class="form-group hidden">
+		<input type="text" value="Event" name="PostType">
+	</div>  
+	<% if(user.isGuest == false && userCreateCredentials.length >0 ){ %>
+		<div class="form-group">
+		  <b> Credential Offered? </b> <br />
+		  Yes
+		  <input type="radio" onclick="javascript:yesnoCheck();" value="true" name="CredentialOffer" id="yesCheck" />
+		  No
+		  <input type="radio" onclick="javascript:yesnoCheck();" value="false" name="CredentialOffer"
+			id="noCheck" /><br />
+		</div>
+		<% } else{ %>  
+		<div class="form-group">
+		  <b> Credential Offered? </b> <br />
+		  <input type="radio" data-toggle="modal" data-target="#myModal" > Yes
+		  <input type="radio" value="false" name="CredentialOffer" onchange="popUpWarning = true;"> No
+  
+		  <div class="modal fade" id="myModal" role="dialog">
+			<div class="modal-dialog">
+			  <div class="modal-content">
+				<div class="modal-body">
+				  <p> Your group does not have any credentials available, would you like to create one now?					</p>
+					<div class="model-buttons" style="text-align: center;">
+						<button type="button" style="width: 100px;" onclick="myfunction()"><a href="/credentials/<%=userId%>">Yes</a></button>                     
+						<button type="button" style="width: 100px;"><a data-dismiss="modal">No,Thanks</a></button>
+					</div>				
+				</div>
+			  </div>
+			</div>
+		  </div>
+		</div>   
+		<% } %>
+		<div id="ifYes" style="display:none">
+		  <script type="text/javascript">
+			function yesnoCheck() {
+				popUpWarning = true;
+			  if (document.getElementById("yesCheck").checked) {
+				document.getElementById("ifYes").style.display = "block";
+				document.getElementById("CredentialName").required = true;
+				document.getElementById(
+				  "CredentialDescription"
+				).required = true;
+				document.getElementById("CredentialSkill").required = true;
+				document.getElementById("ClaimCode").required = true;
+			  } else {
+				document.getElementById("ifYes").style.display = "none";
+				document.getElementById("CredentialName").required = false;
+				document.getElementById(
+				  "CredentialDescription"
+				).required = false;
+				document.getElementById("CredentialSkill").required = false;
+				document.getElementById("ClaimCode").required = false;
+			  }
+			}
+			function expirationCheck() {
+			  popUpWarning = true;
+			  if (document.getElementById("yesCheckExpiration").checked) {
+				document.getElementById("ifYesExpiration").style.display =
+				  "block";
+				document.getElementById("ExpirationDate").required = true;
+			  } else {
+				document.getElementById("ifYesExpiration").style.display =
+				  "none";
+				document.getElementById("ExpirationDate").required = false;
+			  }
+			}
+		  </script>
+		  <div class="form-group">
+			<label for="profile links"><b>Attach a Credential : </b></label>
+			<select class="form-control" id="attachCredential" name="credentialId" onchange="popUpWarning = true;" >			 
+				<option value="">select any credential type</option>
+				<% if(userCreateCredentials && userCreateCredentials.length >= 0) { 
+					userCreateCredentials.forEach( createdCredential => { 
+						groups.forEach(group=>{
+							if(createdCredential.ssgroupId == group.id){%>  
+				<option value="<%= createdCredential.id %>"><%= createdCredential.credentialName %> -<%= group.name %>  </option>
+				<%} }); }); } else { %>
+				<input type="text" />
+				<% } %>
+			  </select>
+		  </div>  
+		  <div class="form-group">
+			<label for="name"><b> Demonstrated Skills* : </b></label>
+			<input type="text" class="form-control" id="CredentialSkill"
+			  name="CredentialSkill" autocomplete="off" onchange="popUpWarning = true;" />
+		  </div>
+		<div class="form-group">
+			<b> Expiration? </b> <br>
+			Yes <input type="radio" onclick="javascript:expirationCheck();" value="true" name="CredentialExpiration"
+				id="yesCheckExpiration" />
+			No <input type="radio" onclick="javascript:expirationCheck();" value="false" name="CredentialExpiration"
+				id="noCheckExpiration" />
+		</div>
+		<div id="ifYesExpiration" style="display:none">
+			<div class="form-group">
+				<label for="expiration"><b> Expiration Date * </b></label>
+				<input type="date" class="form-control input-size" placeholder="MM/DD/YYYY" name="ExpirationDate"
+					id="ExpirationDate" onchange="popUpWarning = true;">
+			</div>
+		</div>
+	</div>	
+	<div class="form-group input-align">
+		<button type="submit" class="btn sign-btn" id="createPostBtn">
+			Save
+		</button>
+	</div>
+
+</form>
+<script>
+		window.onbeforeunload = function(e) {
+			if(popUpWarning){
+				localStorage.clear();
+				return e.returnValue = 'If you leave this page, Changes may not be saved.';
+				}
+		};
+		function ValidationEvent() {
+			window.onbeforeunload = null;
+
+			if(!validatePostName){
+				return false;
+			}else if(!invalidPost){
+				return false;
+			}else if(!checkProfileURL){
+				return false;
+			}else if(!checkProfileImage){
+				return false;
+			}else if(!attachProfile){
+				return false;
+			}else if(!invalidDesc){
+				return false;
+			}else if(!checkWebURL){
+				return false;
+			}else if(!CheckGalleryImage){
+				return false;
+			}else if(!checkPostalCode){
+				return false;
+			}else if(!invalidPostal){
+				return false;
+			}else if(!checkStartDateTime){
+				return false;
+			}else if(!checkEndDateTime){
+				return false;
+			}else if(!invalidDateTime){
+				return false;
+			}else {
+				localStorage.clear();
+				return true;
+			}
+		}	
+	</script>
+	
+	<script>
+			function myfunction(){
+				window.onbeforeunload = null;
+				saveValue(this);
+			}
+
+			function saveValue(item_ids) {
+			
+				var items = {
+					name: document.getElementById("postName").value,
+					event_url: document.getElementById("eventUrlCheck").value,
+					// post_image: document.getElementById("postimage").value,
+					Attach_Profile: document.getElementById("attach_profile").value,
+					description: document.getElementById("post_description").value,
+					Web_url: document.getElementById("webUrlCheck").value,
+					Ticket_Url: document.getElementById("ticketUrlCheck").value,
+					// Gallery: document.getElementById("gallery").value,
+					Address: document.getElementById("address").value,
+					Address2: document.getElementById("address2").value,
+					City: document.getElementById("city").value,
+					Province: document.getElementById("province").value,
+					Country: document.getElementById("country").value,
+					Postal_Code: document.getElementById("postalcodecheck").value,
+					// Promotion_D_Start: document.getElementById("promotionDurationStart").value,
+					// Promotion_D_End: document.getElementById("promotionDurationEnd").value,
+					Attach_Credential: document.getElementById("attachCredential").value,
+					Credential_Skill: document.getElementById("CredentialSkill").value,
+					// Expiration_Date: document.getElementById("expirationDate").value
+				}
+			
+				localStorage.setItem('Post_Event_Data_items', JSON.stringify(items));
+			}
+
+
+			var jsonData2 = JSON.parse(localStorage.getItem('Post_Event_Data_items'));
+			document.getElementById("postName").value = jsonData2.name;
+			document.getElementById("eventUrlCheck").value = jsonData2.event_url;
+			// document.getElementById("postimage").value = jsonData2.post_image;
+			document.getElementById("attach_profile").value = jsonData2.Attach_Profile;	
+			document.getElementById("post_description").value = jsonData2.description;
+			document.getElementById("webUrlCheck").value = jsonData2.Web_url;
+			document.getElementById("ticketUrlCheck").value = jsonData2.Ticket_Url;
+			// document.getElementById("gallery").value = jsonData2.Gallery;
+			document.getElementById("address").value = jsonData2.Address;
+			document.getElementById("address2").value = jsonData2.Address2;
+			document.getElementById("city").value = jsonData2.City;
+			document.getElementById("province").value = jsonData2.Province;
+			document.getElementById("country").value = jsonData2.Country;
+			document.getElementById("postalcodecheck").value = jsonData2.Postal_Code;
+			// document.getElementById("promotionDurationStart").value = jsonData2.Promotion_D_Start;
+			// document.getElementById("promotionDurationEnd").value = jsonData2.Promotion_D_End;
+			document.getElementById("attachCredential").value = jsonData2.Attach_Credential;
+			document.getElementById("CredentialSkill").value = jsonData2.Credential_Skill;
+			// document.getElementById("expirationDate").value = jsonData2.Expiration_Date;
+
+		</script>
+
+</html>

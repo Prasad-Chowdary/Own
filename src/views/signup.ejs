@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Signup</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="css/signup.css">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  <script src="//www.google.com/recaptcha/api.js?render=6Le6C6EUAAAAAGCXfk7quuo_Y040Pxn6Y2FrGi-i"></script>
+  <script>grecaptcha.ready(function () {
+      grecaptcha.execute('6Le6C6EUAAAAAGCXfk7quuo_Y040Pxn6Y2FrGi-i', { action: 'signup' }).
+        then(function (token) {
+          var recaptchaResponse = document.getElementById('recaptchaResponse');
+          console.log(recaptchaResponse);
+          recaptchaResponse.value = token;
+        });
+    });
+    $(document).ready(function () {
+      $("#signUpBtn").prop('disabled', true);
+    });
+
+  </script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body class="body">
+  <div class="container">
+    <div class="row">
+      <div class="signup-div">
+        <div class="logo-img-div">
+          <a href="/index"><img src="images/Skill Squirrel LOGO vert PURPLE.png" alt="Squirrel" class="logo-img"></a>
+        </div>
+        <div class="login-form-div">
+          <form name="myform" class="form-style" action="add-user" method="POST" onsubmit="return formValidation()">
+            <div class="form-group input-align">
+              <% if(err != undefined || err != null){ %>
+              <p>
+                <font size="2" color="red"><b><%= err %></b></font>
+              </p>
+              <%} %>
+              <input type="firstname" id="Firstname" class="login-input" placeholder="First Name" name="firstname"
+                onchange='Javascript:validateFirstName() ' required>
+              <p id="fnameError" class="error-message"></p>
+            </div>
+            <script>
+              function validateFirstName() {
+                document.getElementById("fnameError").innerHTML = "";
+                var name = /^[a-zA-Z-,]+(\s{0,1}[a-zA-Z-, ])*$/;
+                var firstname = document.getElementById('Firstname');
+                if (!name.test(firstname.value)) {
+                  document.getElementById("fnameError").innerHTML = "Invalid characters found in the first name ";
+                } else {
+                  return true;
+                }
+              }
+            </script>
+            <div class="form-group input-align">
+              <input type="lastname" id="Lastname" class="login-input" placeholder="Last Name" name="lastname"
+                onchange='Javascript:validateLastName() ' required>
+              <p id="lnameError" class="error-message"></p>
+            </div>
+            <script>
+              function validateLastName() {
+                document.getElementById("lnameError").innerHTML = "";
+                var name = /^[a-zA-Z-,]+(\s{0,1}[a-zA-Z-, ])*$/;
+                var lastname = document.getElementById('Lastname');
+                if (!name.test(lastname.value)) {
+                  document.getElementById("lnameError").innerHTML = "Invalid characters found in the last Name ";
+                } else {
+                  return true;
+                }
+              }
+            </script>
+            <div class="form-group input-align">
+              <input type="email" id="txtEmail" class="login-input" placeholder="Email" name="Email"
+                onchange='Javascript:checkEmail() ' required>
+              <p id="emailError" class="error-message"></p>
+            </div>
+            <script>
+              function checkEmail() {
+                document.getElementById("emailError").innerHTML = "";
+                var email = document.getElementById('txtEmail');
+                var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+
+                if (!filter.test(email.value)) {
+                  document.getElementById("emailError").innerHTML = "This Email dosn't appear to be valid ";
+                  return false;
+                } else {
+                  return true;
+                }
+              }
+            </script>
+            <div class="form-group input-align">
+              <input type="password" id="password" class="login-input" placeholder="Password" name="Password"
+                onchange='Javascript:validate() ' required>
+              <p id="passwordError" class="error-message"></p>
+            </div>
+            <script>
+              function validate() {
+                document.getElementById("passwordError").innerHTML = "";
+                var Password = document.getElementById('password');
+                var filter = /^(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{7,30}$/;
+                if (!filter.test(Password.value)) {
+                  document.getElementById("passwordError").innerHTML = "Password must have more that six digits and contain both upper and lowercase letters, numbers, and special characters. ";
+                  return false;
+                } else {
+                  return true;
+                }
+              }
+            </script>
+            <div class="form-group input-align">
+              <input type="password" id="confirmpassword" class="login-input" placeholder="Confirm Password"
+                name="confirmpassword" onchange='Javascript:confirmValidate()  ? formValidation() : formValidation()'
+                required>
+              <p id="confirmpasswordError" class="error-message"></p>
+            </div>
+            <script>
+              function confirmValidate() {
+                document.getElementById("confirmpasswordError").innerHTML = "";
+                var password = document.getElementById("password").value;
+                var confirmPassword = document.getElementById("confirmpassword").value;
+                if (password != confirmPassword) {
+                  document.getElementById("confirmpasswordError").innerHTML = "Passwords do not match. ";
+                  return false;
+                }
+                return true;
+              }
+            </script>
+            <input type="hidden" name="recaptchaResponse" id="recaptchaResponse">
+            <div class="form-group input-align">
+              <button type="submit" class="btn sign-btn" id="signUpBtn">Sign up</button>
+            </div>
+          </form>
+          <script>
+            function formValidation() {
+              if (validateFirstName() && validateLastName() && validate() && checkEmail() && confirmValidate()) {
+                $("#signUpBtn").prop('disabled', false);
+                return true;
+              } else {
+                $("#signUpBtn").prop('disabled', true);
+                return false;
+              }
+            }
+          </script>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

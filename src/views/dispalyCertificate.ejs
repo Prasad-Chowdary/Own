@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>view-certificate</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+	<link rel="stylesheet" type="text/css" href="/css/group.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<body>
+	<!-- <div class="col-md-12" style="border-bottom: 2px solid #2c29dc; padding-bottom: 20px;"> -->
+	<div class="col-md-2">
+		<img src="<%= certificateData.badge.issuer.image %>" class="group-preview-img"
+			alt="<%= certificateData.badge.issuer.name %>">
+	</div>
+	<div class="col-md-2">
+		<!-- <img src="<%= certificateData.badge.image %>" class="group-preview-img"
+			alt="<%= certificateData.badge.image %>"> -->
+	</div>
+	<div class="col-md-6">
+		<div class="account-create-div">
+			<p>
+				<h4><b><%= certificateData.badge.name %></b></h4>
+			</p>
+		</div>
+		<div class="account-create-div">
+			<p>
+				<h4><b><%= certificateData.recipientProfile.name %></b</h4> </p> </div> <span>Issued on <time
+							datetime="2019-05-23T07:45:59.232946+00:00">
+							<%= certificateData.issuedOn %>
+						</time> by <%= certificateData.badge.issuer.name %>
+						</span>
+		</div>
+		<div class="col-md-2" style="text-align:center; padding: 50px;">
+			<% if (user.isGuest == true){ %>
+			<input type="button" value="Add to Account" data-toggle="modal" data-target="#myModal">
+			<% } else if(user.isGuest == false && credential.isCredentialAcquired == false){ %>
+			<input type="button" value="Add to Account" data-toggle="modal" data-target="#claimCode">
+			<% } else if(user.isGuest == false && credential.isCredentialAcquired == true) {%>
+			<a href="/credential-add/<%=credential.id%>/<%=user.id%>" class="btn btn-info" role="button">Credential</a>
+			<% } %>
+
+			<!-- Button for certificate verification -->
+			<div style="margin: 10px">
+				<Button id="getVerify" onclick="getCertificateVerify()" data-toggle="modal" 
+				data-target="#CertificateVerificationModal" data-backdrop="static" data-keyboard="false">Verify</Button> 
+			</div>
+			<script>
+				function getCertificateVerify(){
+					debugger;
+					var jsonData = {certificateData:'<%- JSON.stringify(certificateData) %>'}
+					console.log(jsonData)
+					$.ajax({
+						url: "/getCertificateVerify/<%=user.id%>/<%=post.id%>",
+						type: 'post',
+            			dataType: 'json',
+						data: jsonData,
+						success: function(resultData) { 
+							
+							// alert("Save Complete") ;
+							resultData.map(item => {
+								debugger;
+								if(item.name === "Checking certificate has not been tampered with"){
+									document.getElementById("tamperedList").textContent = item.name;
+									if(item.status === "passed"){
+										document.getElementById("tamperedPass").style.display = 'block';
+									}else{
+										document.getElementById("tamperedFail").style.display = 'block';
+									}
+								}
+								if(item.name === "Checking certificate has not expired"){
+									document.getElementById("expiredList").textContent = item.name;	
+									if(item.status === "passed"){
+										document.getElementById("expiredPass").style.display = 'block';
+									}else{
+										document.getElementById("expiredFail").style.display = 'block';
+									}
+								}
+								if(item.name === "Checking not revoked by issuer"){
+									document.getElementById("issuerList").textContent = item.name;	
+									if(item.status === "passed"){
+										document.getElementById("issuerPass").style.display = 'block';
+									}else{
+										document.getElementById("issuerFail").style.display = 'block';
+									}
+								}
+								if(item.name === "Checking authenticity")	{
+									document.getElementById("authenticityList").textContent = item.name;
+									if(item.status === "passed"){
+										document.getElementById("authenticityPass").style.display = 'block';
+									}else{
+										document.getElementById("authenticityFail").style.display = 'block';
+									}
+								}
+								if(item.name === "Validation")	{
+									document.getElementById("validationList").textContent = item.name;
+									if(item.status === "passed"){
+										document.getElementById("validationPass").style.display = 'block';
+									}else{
+										document.getElementById("validationFail").style.display = 'block';
+									}
+								}
+							})
+						}
+					});
+				}
+			</script>
+
+			<div class="modal fade" id="CertificateVerificationModal" role="dialog">
+					<div class="modal-dialog">
+						<div class="modal-content">
+								<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">&times;</button>
+										<h4 class="modal-title">Certificate Verification</h4>
+									  </div>
+							<div class="modal-body">
+									<ul class="list-group">
+											<li class="list-group-item" style="min-height: 20px;margin-left: 5px">
+												<div class="row"> 
+													<div class="col-md-8">
+														<p id="tamperedList"></p> 
+													</div>
+													<div class="col-md-4">
+													<span class="glyphicon glyphicon-ok text-success" id="tamperedPass" style="display: none" ></span>
+													<span class="glyphicon glyphicon-remove text-danger" id="tamperedFail"  style="display: none"></span>
+												</div>
+												</div>
+											</li>
+											<li class="list-group-item" style="min-height: 20px;margin-left: 5px">
+												<div class="row"> 
+													<div class="col-md-8">
+														<p  id="expiredList"></p> 
+													</div>
+													<div class="col-md-4">	
+														<span class="glyphicon glyphicon-ok text-success" id="expiredPass" style="display: none"></span>
+														<span class="glyphicon glyphicon-remove text-danger" id="expiredFail" style="display: none"></span>
+													</div>
+											</li> 
+											<li class="list-group-item" style="min-height: 20px;margin-left: 5px">
+												<div class="row"> 
+													<div class="col-md-8">
+														<p  id="issuerList"></p> 
+													</div>
+													<div class="col-md-4">	
+														<span class="glyphicon glyphicon-ok text-success" id="issuerPass" style="display: none"></span>
+														<span class="glyphicon glyphicon-remove text-danger" id="issuerFail" style="display: none"></span>
+													</div>
+											</li> 
+											<li class="list-group-item" style="min-height: 20px;margin-left: 5px">
+													<div class="row"> 
+															<div class="col-md-8">
+												<p id="authenticityList"></p> 
+												</div>
+												<div class="col-md-4">	
+												<span class="glyphicon glyphicon-ok text-success" id="authenticityPass" style="display: none"></span>
+												<span class="glyphicon glyphicon-remove text-danger" id="authenticityFail" style="display: none"></span>
+												</div>
+											</li> 
+											<li class="list-group-item" style="min-height: 20px;margin-left: 5px">
+												<div class="row"> 
+													<div class="col-md-8">
+													<p id="validationList"></p> 
+												</div>
+												<div class="col-md-4">	
+													<span class="glyphicon glyphicon-ok text-success" id="validationPass" style="display: none"></span>
+													<span class="glyphicon glyphicon-remove text-danger" id="validationFail" style="display: none"></span>
+												</div>
+											</li> 
+										  </ul>
+										  <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+			<div class="modal fade" id="myModal" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-body">
+							<p> Would you like to create an account now to download this credential? <a
+									href="/index">Yes</a>/<a href="">No</a> </a> </p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal fade" id="claimCode" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title">Please enter claim code</h4>
+						</div>
+						<div class="modal-body">
+							<form onsubmit="return formValidation()">
+								<label><input type="text" name="coupon" id="in" class="coupon" title="Enter coupon">
+									<span id="usernameError"></span>
+								</label>
+								<br><input type="button" value="Verify Here" id="vrfCode" onClick="validate(coupon)"
+									style="text-align: center" />
+							</form>
+							<p id="message"></p>
+							<p id="err"></p>
+							<script>
+								function validate(coupon) {
+									var myRe = "<%= attachedCredential.claimCode%>";
+									var coupon = myRe.trim();
+									var input = document.getElementById('in').value;
+									if (input.toUpperCase() == coupon.toUpperCase()) {
+										document.getElementById('message').innerHTML = 'Claim code applied!. Please <a href="/credential-add/<%=credential.id%>/<%=user.id%>"> click here </a> to add Credentials ';
+										document.getElementById('err').innerHTML = "";
+										return true;
+									} else {
+										document.getElementById('err').innerHTML = "Invalid Claim Code. Please enter right code";
+										document.getElementById('message').innerHTML = "";
+										return false;
+									}
+								}
+								function formValidation() {
+									if (validate(coupon)) {
+										$("#vrfCode").prop('disabled', false);
+										return true;
+									} else {
+										$("#vrfCode").prop('disabled', true);
+										return false;
+									}
+								}
+							</script>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-12" style="border-bottom: 2px solid #2c29dc; padding-bottom: 35px;"></div>
+		<div class="col-md-12" style="padding-top: 30px;">
+			<p><h4><b><%= certificateData.badge.description %></b></h4></p>
+		</div>
+</body>
+</html>

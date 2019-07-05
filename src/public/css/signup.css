@@ -1,0 +1,52 @@
+
+.login-input{
+      	background: transparent;
+		border: 0px;
+		border-bottom: 1px solid black;
+		border-radius: 0px;
+		display: block;
+		width: 100%;
+		height: 34px;
+		padding: 6px 12px;
+		font-size: 14px;
+		line-height: 1.42857143;
+		color: #555;
+ }
+ .container-first{
+width:100%;
+height: 100%;
+padding: 0px;
+ }
+.login-form-div{
+  height:70%; 
+  margin-top: 130px;
+}
+.input-align{
+	margin-top: 10PX;
+	margin-left: 200px;
+	margin-right: 200px;
+}
+.sign-btn{
+background:#F7941D;
+ height:35px; 
+ width: 100%;
+ margin-top: 80px;
+ }
+.signup-div{
+height:100%;
+background:#D6D1CA;
+text-align:center;
+padding:100px 50px;
+}
+.body{
+	background:#D6D1CA;
+}
+.logo-img-div{
+    height:30%;
+}
+.logo-img{
+	width:170px;
+}
+.form-style{
+	padding: 20px 110px;
+}

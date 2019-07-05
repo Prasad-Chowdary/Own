@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Create-Group</title>
+  <meta charset="utf-8">	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+	<form action="action_page.php">
+		  <div class="container" style="padding: 0px 300px;">
+		    <h3>Create a Group</h3>
+		    <div class="form-group">
+		    	<label for="name"><b>Group Name* </b></label>
+		    	<input type="text" class="form-control" required>
+		    	<p>Enter a unique profile name</p>	
+		    </div>
+		    <div class="form-group">
+		    	<label for="goal"><b>Website URL</b></label>
+		    	<input type="text" class="form-control" required>		    	
+		    </div>            
+           <div class="form-group">
+			    <label for="Postal Code"><b>Postal Code* </b></label>
+			    <input type="text" class="form-control" required> 			   
+		   </div>
+		   <div class="form-group">
+	   			<label for="Image" style="width:50%;"><b>Group Image </b></label>	   			
+	   			<div style="padding: 14px;background-color: #c3bbbb;width: 50px;float: right;"><i class="fa fa-users" aria-hidden="true" style="font-size:20px;"></i></div>
+	   			<input type="file" name="image" id="image">
+           </div>
+           <div class="form-group">
+			    <label for="desc"><b>Group Description* </b></label>
+			    <input type="text" class="form-control" required> 			   
+		   </div>
+		   <div class="form-group">
+		   	    <label for="Group Type"><b>Group Type* </b></label>
+			    <select>
+				   <option value="select one">select one</option>
+				   <option value="anyone can join">anyone can join</option>
+				   <option value="application required">application required</option>				  
+				</select>	   
+		   </div>
+		   <input type="submit" value="Submit" style="margin-top: 20px;">          
+    </form>
+   </head>
+   </html>

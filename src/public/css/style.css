@@ -1,0 +1,58 @@
+
+.login-input{
+      	background: transparent;
+		border: 0px;
+		border-bottom: 1px solid black;
+		border-radius: 0px;
+		display: block;
+		width: 100%;
+		height: 34px;
+		padding: 6px 12px;
+		font-size: 14px;
+		line-height: 1.42857143;
+		color: #555;
+ }
+ .container-first{
+width:100%;
+height: 100%;
+padding: 0px;
+ }
+.left-image{
+  text-align:center; 
+  height:100vh; 
+  padding:100px 50px;
+}
+.login-form-div{
+  height:70%; 
+  margin-top: 130px;
+}
+.login-btn{
+background:#5B89B5; 
+height:35px; 
+margin-top: 40px; 
+width: 100%;
+}
+.sign-btn{
+background:#F7941D;
+ height:35px; 
+ width: 100%;
+ }
+.guest-btn{
+height:35px; 
+margin-top: 80px; 
+border: 1px 
+solid black; 
+width: 100%;
+}
+.logo-img{
+height:100%;
+background:#D6D1CA;
+text-align:center;
+padding:100px 50px;
+}
+.error-message{
+	color: red;
+    font-size: 12px;
+    text-align: left;
+    padding: 5px 0px 0px 0px;
+}

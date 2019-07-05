@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>group-edit</title>
+  	<meta charset="utf-8">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+	<link rel="stylesheet" type="text/css" href="/css/group.css">
+	<link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+	<script>
+		var validategrpName,
+			invalidGroup,	
+			checkCode,
+			invalidPostal,
+			checkImageType,
+			invalidFile,
+			invalidDesc,
+			checkCriteria = true,
+			checkURL = true,
+			popUpWarning = false;
+			$(document).ready(function(){
+				$('[data-toggle="tooltip"]').tooltip();   
+			});
+	</script>
+		<body>
+
+			<% var current= 'groups' %>
+			<%- include ./partials/head  %>
+		
+			<form action="/update_group_details/<%= userId %>/<%= group.id %>" method="POST" id="cprfForm" enctype="multipart/form-data" onsubmit="return ValidationGroup()">
+				<input type="hidden" name="userId" value="<%= userId %>">
+				<div class="container" style="padding: 0px 300px;">
+					<h3>Edit a Group</h3>
+					<div class="form-group">
+						<label for="name"><b>Group Name* </b></label>
+						<input type="text" name="Name" id="grpName" class="form-control" onchange='Javascript:ValidategrpName()'
+							value="<%= group.name %>"	required oninvalid="InvalidGroup(this);" 
+							oninput="InvalidGroup(this);" autocomplete="off">
+						<p>Enter a unique profile name</p>
+						<p id="nameError" class="error-message"></p>
+						<script>
+						function ValidategrpName() {
+							popUpWarning = true;
+						document.getElementById("nameError").innerHTML = "";
+						// var name = /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$/;
+						var text = document.getElementById('grpName');
+						// if (!name.test(text.value)) {
+						if(!text.value){
+							document.getElementById("nameError").innerHTML = "Invalid characters found in the group name ";
+							text.style = "box-shadow: 0 0 5px 1px red";
+							validategrpName = false;
+							return false;
+						} else {
+							text.setCustomValidity('');
+							text.style = "box-shadow: none";
+							validategrpName =true;
+							return true;
+						}
+					}
+					function InvalidGroup(textbox) {
+						if (textbox.value === '') {
+							textbox.setCustomValidity('Required Group Name');
+							textbox.style = "box-shadow: 0 0 5px 1px red";
+							invalidGroup= false;
+							return false;
+						} else {
+							textbox.setCustomValidity('');
+							textbox.style = "box-shadow: none";
+							invalidGroup = true;
+							return true;
+						}
+					}
+						</script>
+					</div>
+					<div class="form-group">
+						<label for="name"><b>Trade Name/Acronym </b></label>
+						<input type="text" name="TradeName" id="tradename" value="<%= group.tradename %>" class="form-control"
+						autocomplete="off" onchange="popUpWarning = true;">
+					</div>
+					<div class="form-group">
+						<label for="URL"><b>Website URL</b></label>
+						<input type="text" name="webSiteURL" class="form-control" id="urlcheck" onchange='Javascript:CheckURL();' autocomplete="off">
+						<p id="urlError" class="error-message"></p>
+						<script>
+							function CheckURL() {
+							  popUpWarning = true;
+							  document.getElementById("urlError").innerHTML = "";
+							  var url = document.getElementById("urlcheck");
+							  var filter = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+							  if (!filter.test(url.value)) {
+								document.getElementById("urlError").innerHTML = "Please enter valid URL...!";
+								document.getElementById("urlcheck").style = "box-shadow: 0 0 5px 1px red";
+								CheckURL = false;
+								return false;
+							  }else{
+								document.getElementById("urlcheck").style = "box-shadow: none";
+								CheckURL = true;
+								return true;
+							  }
+							}
+						  </script>
+					</div>
+					<div class="form-group">
+						<label for="Postal Code"><b>Postal Code* </b></label>
+						<input type="text" name="PostalCode" class="form-control" id="codecheck" onchange='Javascript:CheckCode();'
+						 value="<%= group.postalCode %>"	required
+						 oninvalid="InvalidPostal(this);" 
+							oninput="InvalidPostal(this);" autocomplete="off">
+						<p id="codeError" class="error-message"></p>
+						<script>
+							function CheckCode(textCode) {
+								popUpWarning = true;
+								document.getElementById("codeError").innerHTML = "";
+								var code = document.getElementById('codecheck');
+								var filter = /^\d{5}-\d{4}|\d{5}|[A-Z]\d[A-Z] \d[A-Z]\d|[0-9]{6}|[A-Za-z]{1,2}[\d]{1,2}([A-Za-z])?\s?[\d][A-Za-z]{2}$/;
+								if (!filter.test(code.value)) {
+									document.getElementById("codeError").innerHTML = "Please enter valid Postal Code";
+									code.style = "box-shadow: 0 0 5px 1px red";
+									checkCode = false;
+									return false;
+								} else {
+									code.setCustomValidity('');
+									code.style = "box-shadow: none";
+									checkCode = true;
+									return true;
+								}
+							}
+						function InvalidPostal(textbox) {
+							if (textbox.value === '') {
+								textbox.setCustomValidity('Required Postal code');
+								textbox.style = "box-shadow: 0 0 5px 1px red";
+								invalidPostal = false;
+								return false;
+							} else {
+								textbox.setCustomValidity('');
+								textbox.style = "box-shadow: none";
+								invalidPostal = true;
+								return true;
+							}
+						}
+						</script>
+					</div>
+					<div class="form-group">
+							<div class="card" style=" border: 1px solid silver;border-radius: 5px;padding:5px">
+						<label for="Image" style="width:50%;"><b>Group Image <img src="https://img.icons8.com/ios/20/000000/about-filled.png" data-toggle="tooltip" title="Image Size should be MAX(400x400 pixels)!"></b></label>
+						<div style="background-color: #c3bbbb;float: right;">				
+							<img id="output" src="<%= group.groupImage %>" height="50"/>
+							</div>
+							<input type="file" name="image" id="grpimage" onchange='Javascript:CheckImageType(event);'	
+								oninvalid="InvalidFile(this);" 
+								oninput="InvalidFile(this);">						
+						<script>							
+							function CheckImageType(event) {
+								popUpWarning = true;
+								var output = document.getElementById('output');
+								var inputFile = document.getElementById('output');
+								output.src = URL.createObjectURL(event.target.files[0]);
+								document.getElementById("fileError").innerHTML = "";
+								var file = document.getElementById('grpimage');
+								var filter = /\.(jpe?g|png|gif|bmp|svg)$/i;
+								if (!filter.test(file.value)) {
+									document.getElementById("fileError").innerHTML = "Please select a valid image or file";
+									file.style = "box-shadow: 0 0 5px 1px red";
+									checkImageType = false;
+									return false;
+								} else {
+									file.setCustomValidity('');
+									file.style = "box-shadow: none";
+									// return true;
+									output.onload = function () {
+										debugger;
+										var height = this.naturalHeight;
+										var width = this.naturalWidth;
+										
+										if ( height > 400 && width > 400) {
+											document.getElementById("fileError").innerHTML = "Uploaded Group Icon should be MAX(400x400 pixels)";
+											file.style = "box-shadow: 0 0 5px 1px red";
+											checkImageType = false;
+											return false;
+										} else {
+											file.setCustomValidity('');
+											file.style = "box-shadow: none";
+											checkImageType = true;
+											return true;
+										}
+									};
+								}
+						}
+						function InvalidFile(file) {
+							if (file.value === '') {
+								file.setCustomValidity('Required Group Icon');
+								file.style = "box-shadow: 0 0 5px 1px red";
+								invalidFile = false;
+								return false;
+							} else {
+								file.setCustomValidity('');
+								file.style = "box-shadow: none";
+								invalidFile = true;
+								return true;
+							}
+						}
+						</script>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="desc"><b>Group Description* </b></label>						
+						<textarea type="text" name="description" class="form-control" cols="40" rows="5" 
+								required autocomplete="off"
+								onchange="popUpWarning = true;"
+								oninvalid="InvalidDesc(this);" 
+								oninput="InvalidDesc(this);">
+								<%= group.description %>
+							</textarea>   
+							<script>
+									function InvalidDesc(desc) {
+										if (desc.value === '') {
+											desc.setCustomValidity('Required Description');
+											desc.style = "box-shadow: 0 0 5px 1px red";
+											invalidDesc = false;
+											return false;
+										} else {
+											desc.setCustomValidity('');
+											desc.style = "box-shadow: none";
+											invalidDesc = true;
+											return true;
+										}
+									}
+							</script>       
+					</div>
+					<div class="form-group">
+						<label for="Group Type"><b>Group Type* </b></label>
+						<select id="groupTypeSelect" name="groupType" selected="<%= group.groupType %>" 
+							onchange="popUpWarning = true;">
+							<option value="open">Open, anyone can join</option>
+							<option value="close">Closed, application required</option>
+						</select>
+						<div id="showMe">
+							<label for="Group Type"><b>Describe the criteria for being added to the group </b></label>
+							<input type="text" class="form-control" name="groupJoinCriteria" id="joincriteria" onchange='Javascript:CheckCriteria();' 
+								value="<%= group.groupJoinCriteria %>" autocomplete="off">
+							<p id="textError" class="error-message"></p>
+							<script>
+								function CheckCriteria() {
+									document.getElementById("textError").innerHTML = "";
+									var text = document.getElementById('joincriteria');
+									var filter = /^[a-zA-Z-,]+(\s{0,1}[a-zA-Z-, ])*$/;
+									if (!filter.test(text.value)) {
+										document.getElementById("textError").innerHTML = "Please enter a valid text";
+										checkCriteria = false;
+										return false;
+									}else{
+										checkCriteria = true;
+										return true;
+									}
+								}
+							</script>
+						</div>
+					</div>					
+					<div class="form-group input-align">
+						<button type="submit"  class="btn sign-btn" id="editBtn">Update</button>
+					</div>
+			</form>
+			</head>
+			<script>
+					var elem = document.getElementById("groupTypeSelect");
+					 elem.onchange = function(){
+							 var hiddenDiv = document.getElementById("showMe");
+							 hiddenDiv.style.display = (this.value == "close") ? "block":"none";
+					 };
+				</script>
+					<script>
+						window.onbeforeunload = function(e) {
+							debugger;
+							if(popUpWarning)
+								return e.returnValue = 'If you leave this page, Changes may not be saved.';
+						};
+
+						function ValidationGroup() {
+							window.onbeforeunload = null;
+							var Name = document.getElementById("grpName").value;						
+							var PostalCode = document.getElementById("codecheck").value;
+							var image = document.getElementById("grpimage").value;				
+							var webSiteURL = document.getElementById("urlcheck").value;
+
+							// var nameReg = /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$/;
+							var urlReg = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+							var codeReg = /^\d{5}-\d{4}|\d{5}|[A-Z]\d[A-Z] \d[A-Z]\d|[0-9]{6}|[A-Za-z]{1,2}[\d]{1,2}([A-Za-z])?\s?[\d][A-Za-z]{2}$/;
+							var imageReg = /\.(jpe?g|png|gif|bmp|svg)$/i;				
+							
+							// if((!Name.match(nameReg))){		
+								if(!Name){
+									document.getElementById("nameError").innerHTML = "Please enter a valid group name...!";
+									return false;
+								} else if(webSiteURL) {
+									if(!webSiteURL.match(urlReg)) {
+										document.getElementById("urlcheck").style = "box-shadow: 0 0 5px 1px red";
+										return false;
+									}
+								} else if (!PostalCode.match(codeReg)) {
+										document.getElementById("codeError").innerHTML = "Required valid Postal Code...!";
+										return false;
+								} else if (!image.match(imageReg)) {
+									document.getElementById("fileError").innerHTML = "Please select valid Image format...!";
+									return false;
+								}else if(!validategrpName){
+									return false;
+								}else if(!invalidGroup){
+									return false;
+								}else if(!checkCode){
+									return false;
+								}else if(!invalidPostal){
+									return false;
+								}else if(!checkImageType){
+									return false;
+								}else if(!invalidFile){
+									return false;
+								}else if(!invalidDesc){
+									return false;
+								}else if(!checkCriteria){
+									return false;
+								}else {
+									return true;
+								}		
+						}	
+				</script>
+		</body>
+		
+		</html>

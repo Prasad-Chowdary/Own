@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title><%= title %></title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="/css/account.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+      </head> 
+
+<body>  
+    <% var current= 'groups' %>
+    <%- include ./partials/head  %>
+
+<div class="container profile-post-padding" >
+    <div class="account-create-div">
+        <a href="/group/<%= userId %>" class="account-create"> <h4>Cancel</h4> </a> 
+     </div>
+  <h2 style="text-align: center;"><a href="/group-edit/<%= userId %>/<%= group.id %>"><%= group.name %> </a></h2>
+  <h3> <p>Manage Group Members</p> </h3>
+  <div class="tab-content">    
+      <div class="form-group form-inline">
+        <div class="row" >
+            <div class="col-sm-3">
+                <form action="/import-user-groupMembers/<%=group.id %>"  method = "POST" id="cprfForm" enctype="multipart/form-data">   <br>
+                  <h4>Import Members</h4> 
+                  <input type="file" name="image" id="grpimage" onchange='Javascript:checkImageType();'>
+                  <p id="fileError" class="error-message"></p>
+                   <script>
+                      function checkImageType() {
+                        document.getElementById("fileError").innerHTML = "";
+                        var file = document.getElementById('grpimage');
+                        var filter = /\.(jpe?g|png|gif|bmp|svg|csv)$/i;							
+                        if (!filter.test(file.value)) {
+                          document.getElementById("fileError").innerHTML = "Please select a valid image or file";
+                          return false;
+                        }
+                      }
+                      $(document).ready(
+                            function(){
+                                $('input:file').change(
+                                    function(){
+                                        if ($(this).val()) {
+                                            $('input:submit').attr('disabled',false);
+                                            // or, as has been pointed out elsewhere:
+                                            // $('input:submit').removeAttr('disabled'); 
+                                        } 
+                                    }
+                                    );
+                            });
+                    </script>          
+                 <input type="submit" value="Add Members" disabled/>                              
+              </form>
+            </div>
+            <div class="col-sm-2">
+              <h4 style="margin-top: 60px">OR</h4></div>
+            <div class="col-sm-4">
+                <form action="/import-user-groupEventAttendees/<%=group.id %>"  method = "POST" id="cprfForm" enctype="multipart/form-data">   <br>
+                  <h4>Import Attendees</h4> 
+                  <input type="file" name="image" id="grpimage" onchange='Javascript:checkImageType();'>
+                  <p id="fileError" class="error-message"></p>
+                   <script>
+                      function checkImageType() {
+                        document.getElementById("fileError").innerHTML = "";
+                        var file = document.getElementById('grpimage');
+                        var filter = /\.(jpe?g|png|gif|bmp|svg|csv)$/i;							
+                        if (!filter.test(file.value)) {
+                          document.getElementById("fileError").innerHTML = "Please select a valid image or file";
+                          return false;
+                        }
+                      }
+                      $(document).ready(
+                            function(){
+                                $('input:file').change(
+                                    function(){
+                                        if ($(this).val()) {
+                                            $('input:submit').attr('disabled',false);
+                                            // or, as has been pointed out elsewhere:
+                                            // $('input:submit').removeAttr('disabled'); 
+                                        } 
+                                    }
+                                    );
+                            });
+                    </script>          
+                 <input type="submit" value="Add Attendees" disabled/>
+              </form>
+            </div>
+        </div>
+          
+        </div> 
+      <ul class="list-group account-underlist">
+      <% if(groupUsers && groupUsers.length > 0) { 
+        groupUsers.forEach( groupUser => { %>       
+          
+        <li class="list-group-item" style="min-height: 100px;">
+          <div class="account-list-div"><img src="/images/human.png" class="profile-img"></div>
+          <div class="account-list-grp-title">
+             <div> <h4><%=groupUser.firstName%> <%=groupUser.lastName %></h4> </div>
+             <div> <h4> Joined date : <%=moment(groupUser.userGroup.createdAt).format( 'MMM-DD-YYYY') %></h4> </div>   
+          </div>          
+      </li>
+        <% });
+          } else { %>
+            <h4> You have not created any groups yet</h4>
+          <% } %>      
+      </ul>  
+  </div>
+    </div>
+</body>
+</html>

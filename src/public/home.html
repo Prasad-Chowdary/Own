@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Sk-Sq-login</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body>  
+<div class="container container-first">
+  <div class="row">
+    <div class="col-sm-6 left-image">
+      <img src="images/SkSq_FirstPageImage.jpeg" alt="Squirrel">
+    </div>
+    <div class="col-sm-6 logo-img">
+      <div style="height:30%;">
+        <img src="images/Skill Squirrel LOGO vert PURPLE.png" alt="Squirrel" style="width:170px;">
+      </div>
+      <div class="login-form-div">
+        <form style="padding: 20px 110px" action="login" method = "POST">
+          <div class="form-group">
+            <input type="email" class="login-input" placeholder="Email" name = "Email">
+          </div>
+          <div class="form-group">
+            <input type="password" class="login-input" placeholder="Password" name = "Password">
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn login-btn">Log in</button>
+          </div>      
+          <div class="form-group">
+            <button type="button" onclick="location.href='/signup';" class="btn sign-btn">Sign up</button>
+          </div>
+          <div class="form-group">
+           <button type="button" class="btn guest-btn">Continue as a Guest</button>
+          </div>
+        </form>
+      </div>
+    </div>    
+  </div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title><%= title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <main>
+      <p><a href="/create-profile-form/<%= userId %>"> Create a new profile</a>
+      <% if(typeof profiles == "undefined") { %>
+        <p>You do not have any profiles. 
+      <% } else if(profiles.length == 0) { %>
+        < <p>You do not have any profiles. 
+        <% } else { %>
+            You have <%= profiles.length %> profile(s)
+            <ul>
+            <% profiles.forEach( p => { %>
+                <li>
+                    <a href="/group-details/<%= userId %>/<%= g.id %>"> <%= p.name %> </a>  &nbsp; &nbsp; &nbsp;    <%= p.description %>
+                </li>
+            <% }) %>
+        </ul>
+        <% } %>
+    </main>
+</body>
+</html>

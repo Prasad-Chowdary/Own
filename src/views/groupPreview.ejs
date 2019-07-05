@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>group-preview</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+	<link rel="stylesheet" type="text/css" href="/css/group.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+	<script>
+		function sharePage(url) {
+			newwindow = window.open(url, "name", "height=350,width=400,scrollbars=yes");
+			if (window.focus) {
+				newwindow.focus();
+			}
+			return false;
+		}
+		$("document").ready(function () {
+			setTimeout(function () {
+				$("div.alert").remove();
+			}, 3000); // 5 secs
+
+		});
+		if ( window.history.replaceState ) {
+		  window.history.replaceState( null, null, window.location.href );
+		 }
+	</script>
+</head>
+
+<body>
+	<% var current= 'groups' %>
+	<%- include ./partials/head  %>
+
+
+	<form action="/group/<%= userId %>" style="margin-left: 400px; margin-right: 400px; margin-top:80px" method="POST"
+		id="cprfForm" enctype="multipart/form-data">
+		<input type="hidden" name="userId" value="<%=userId%>">
+		<% if (typeof groupSuccessMessage != 'undefined' && groupSuccessMessage) { %>
+		<div class="alert alert-success alert-dismissible" id="myAlert">
+			<a href="#" class="close">&times;</a>
+			<%- groupSuccessMessage %></div>
+		<% }%>
+
+		<div class="col-md-12 mb40">
+			<div class="grp-image-left"><img src="<%= group.groupImage %>" class="group-preview-img"></div>
+			<div class="grp-image-desc">
+				<h4><b><%= group.tradename %></b></h4>
+				<h3><b><%= group.name %></b></h3>
+				<h4><b><%= user.firstName%> <%=user.lastName %></b></h4>
+				<h5><b> Postal code :<%= group.postalCode %></b></h5>
+			</div>
+			<div class="post-image-desc">
+				<%if (group.webSiteURL != null)  { %>
+				<h5><b> Website URL: </b><a href="<%= group.webSiteURL %>" target="_blank"> <%= group.webSiteURL %> </a> </h5>
+				<%  } %>
+			</div>
+		</div>
+		<% if(group.groupType === "close" ){ %>
+
+			<h4><b>Criteria for joining group : </b><%= group.groupJoinCriteria %> </h4>
+		<% } %>
+		<a href="javascript:void(0)" onclick="sharePage('https://www.linkedin.com/cws/share?url=<%= shareLink %>');"
+			title="Linkedin Share" target="_blank" class="fa fa fa-linkedin" aria-hidden="true"
+			style="float: right;margin-left: 30px">
+		</a>
+		<a href="javascript:void(0)" onclick="sharePage('https:///www.google.com/gmail/');" title="Email Share"
+			target="_blank" class="fa fa-envelope fa-share" aria-hidden="true" style="float: right;margin-left: 30px">
+		</a>
+
+		<a href="javascript:void(0)" data-vars-storyid="1555635877747" data-vars-icontype="facebook"
+			onclick="sharePage('http://www.facebook.com/sharer/sharer.php?u=<%= shareLink %>');" title="Facebook Share"
+			class="fa fa-facebook" aria-hidden="true" style="float: right;margin-left: 30px"></a>
+
+		<a href="javascript:void(0)" data-vars-icontype="twitter" data-vars-storyid="1555635877747"
+			onclick="sharePage('https://twitter.com/share?url=<%= shareLink %>');" title="Tweet" class="fa fa-twitter"
+			aria-hidden="true" style="float: right;margin-left: 30px"></a>
+
+		<div>
+			<p><h5><%= group.description %> </h5></p>
+		</div>
+		<input type="submit" value="Submit" style="margin-top: 20px;">
+		<input type="button" value="Edit" id="editButton" style="margin-left:100px"
+			onclick="location.href='/group-edit/<%= userId %>/<%= group.id %>'" />
+	</form>
+</body>
+</html>

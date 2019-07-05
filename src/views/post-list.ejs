@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title><%= title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <main>
+      <p><a href="/postservice/<%= userId %>"> Create a new post</a>
+      <% if(typeof posts == "undefined") { %>
+        <p>You do not have any posts. 
+      <% } else if(posts.length == 0) { %>
+        < <p>You do not have any posts. 
+        <% } else { %>
+            You have <%= posts.length %> posts(s)
+            <ul>
+            <% posts.forEach( p => { %>
+                <li>
+                    <a href="/group-details/<%= userId %>/<%= g.id %>"> <%= p.name %> </a>  &nbsp; &nbsp; &nbsp;    <%= p.description %>
+                </li>
+            <% }) %>
+        </ul>
+        <% } %>
+    </main>
+</body>
+</html>

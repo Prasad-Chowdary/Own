@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>post-rentel-create</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="css/menu.css">
+
+   <div class="container-main">
+	  <div class="row main-header">
+	    <div class="col-md-12 col-sm-12 col-xs-12 bg-purple">     
+	    <div class="container-first">  
+	        <img src="squirrel-logo.png" class="container-first-logo" style="display:inline">        
+	        <ul class="nav navbar-nav pull-right">             
+	          <li><a href="#Career" class="primary-lightGrey"><i class="fa fa-compass" aria-hidden="true"></i> CAREER</a></li>
+	          <li><a href="#Opportunities" class="primary-lightGrey"><i class="fa fa-user"></i> OPPORTUNITIES</a></li>
+	          <li><a href="#Network" class="primary-lightGrey"><i class="fa fa-users" aria-hidden="true"> </i> NETWORK</a></li>
+	          <li><a href="#Messages" class="primary-lightGrey"><i class="fa fa-envelope"></i> MESSAGES</a></li>
+	          <li><a href="#Account" class="primary-lightGrey"><i class="fa fa-user" aria-hidden="true"></i> ACCOUNT</a></li>
+	          <li><a href="#Settings" class="primary-lightGrey"><i class="fa fa-cog" aria-hidden="true"></i></a></li>
+	          <li><a href="#Help" class="primary-lightGrey"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></a></li>
+	          <li style="padding-top: 10px;">
+	            <input type="text" placeholder="Search.." name="search">
+	            <button type="submit"><i class="fa fa-search"></i></button>          
+	        </li>   
+	        </ul>
+	      </div>     
+	      </div>
+	    </div>       
+    </div>
+
+	<form action="action_page.php" style="margin-left: 400px; margin-right: 400px">		 
+		 <h3 style="text-align: center"> RENTAL </h3> 
+		    <h1>Create a Rental post</h1>   
+            <div class="form-group">
+		    	<label for="name"><b>Post Name (required) : </b></label>
+		    	<input type="text" class="form-control" required>		    		
+		    </div>
+		    
+		    	   
+           <div class="form-group">
+           	    <p>Choose a post thumnail <br><i class="fa fa-camera" aria-hidden="true"></i></p>			  
+		   </div> 
+            
+           <div class="form-group">
+			    <label for="profile links"><b>Attach a Profile : </b></label>
+			    <input type="Drop-down menu" placeholder="Profile" class="form-control"> 
+		   </div>          
+
+		    <!-- <div class="clearfix">
+		      <button type="button" style="background-color: green;" class="form-control">Continue</button>     
+		  -->
+		 <!--  the 2nd page -->
+		    
+		    <h1>Post Details</h1>   
+            <div class="form-group">
+			    <label for="name"><b>Description : </b></label>
+			    <input type="text" class="form-control" required>
+			</div>
+			    		   		   
+            <div class="form-group">
+			    <label for="desc"><b>Add an image : <i class="fa fa-camera" aria-hidden="true"></i></b></label>
+			    	<p>Images will be located at the top of post.</p>			   
+			</div>
+			    
+            <div class="form-group">   
+			    <label for="files"><b>Postal Code(required)</b></label>
+			    <input type="text" class="form-control" required>
+			</div>  
+			<div class="form-group">
+			    <label for="desc"><b>Duration : </b></label>
+			    <p>From<input type="text" placeholder="13 july 2016" class="form-control"></p>
+			    <p>To<input type="text" placeholder="13 july 2016" class="form-control"></p>			    		  
+			</div>
+        <!--     <div class="clearfix">		           
+		      <button type="button" style="background-color: green;" class="form-control">Continue</button> -->
+
+		  <!--  the 3nd page -->
+		    
+		    <h1>Post Criteria</h1> 		   
+
+            <div class="form-group">
+			    <label for="name"><b>Rental Rate(per hour) : </b></label>
+			    <input type="Drop-down menu" class="form-control">
+			</div>
+			    		   		   
+            <div class="form-group">
+			    <label for="desc"><b>Rules : </b></label>
+			    <input type="Drop-down menu" class="form-control">
+			    <p>Enter any rules and regulations	for using your resources</p>			    		  
+			</div>
+			    
+            <div class="form-group">   
+			   <label for="profile links"><b>Policy : </b></label>
+			    <input type="Drop-down menu" placeholder="Liability" class="form-control">
+			    <p>select one or ore policies for using this resource</p>
+			</div> 
+			 <div class="form-group"> 
+			    <p>Accept Direct Messages?(required)</p> 
+			    <input type="checkbox" value="Yes"> Yes<br>
+			    <input type="checkbox" value="No"> No<br>			    
+			</div>   
+			
+           <!--  <div class="clearfix">		           
+		      <button type="button" style="background-color: green;" class="form-control">Continue</button>	
+ -->
+		   <!--  the 4h page -->
+		    
+		    <!-- <h1>Preview</h1>  
+		    <div>
+		    	<p>New Resource Post <i class="fa fa-pencil" aria-hidden="true"></i><i class="fa fa-bookmark" aria-hidden="true"></i><i class="fa fa-share" aria-hidden="true"></i></p>			    	
+		    <div>
+              <span ><p>resource .</p>             
+                    <span class="fa fa-star star-checked"></span>
+                    <span class="fa fa-star star-checked"></span>
+                    <span class="fa fa-star star-checked"></span>
+                    <span class="fa fa-star star-checked"></span>
+                    <span class="fa fa-star"></span>
+              </span>
+              <span>0 Overall reviews</span>
+             </div>		    			    		 
+		    </div>
+		  <div class="form-group">
+            <button type="button" class="btn login-btn" style="color: grey;" >Book</button>
+          </div>      
+          <div class="form-group">
+            <button type="button" class="btn sign-btn" style="color: grey;">Message</button>
+          </div>
+           <div>
+		    	<p><i class="fa fa-renren" aria-hidden="true"></i></i></i> Resource posted by</li></p>
+		    	<a href="#" class="w3-bar-item w3-button" style="color:red"> Rentals</a>			    		 
+		    </div>
+          <div>
+		    <p>Post Description <i class="fa fa-pencil" aria-hidden="true"></i></p>	
+		    <p>fdytisu ewlhcsjkdu cwoeihvvvv brgre crehgrt ncp oievcsuy djgvbci ysdrvjc nreicuh jj gel kcdfuog eclhji MORE</
+		  </div>
+		</p></div> --></form></head></html>

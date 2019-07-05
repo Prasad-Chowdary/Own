@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title><%= title %></title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/account.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body> 
+    <% var current= 'home' %>
+    <%- include ./partials/head  %>
+      
+    <div class="tab-content">
+    <div class="container account-contain profile-post-padding" >
+      <div class="form-group has-feedback has-search">
+        <span class="glyphicon glyphicon-search form-control-feedback"></span>
+        <input type="text" id="input" class="form-control" placeholder="Search">
+      </div>   
+
+      <div class="tab-content">    
+
+      <ul class="list-group account-underlist">
+      
+        <% if(posts && posts.length > 0) { 
+          posts.forEach( p => {
+           if(p.name != null && p.profile.visible && p.isActive) {%>
+        <li class="list-group-item" style="min-height: 100px;">
+            <div class="account-list-div">               
+                <%if (p.postTypes == "Service")  { %>
+                  <img src="/images/service.png" class="profile-img toggle-align">
+                  <% }else if (p.postTypes == "Event") { %>
+                    <img src="/images/event.png" class="profile-img toggle-align">
+                    <%  } else if (p.postTypes == "Rental") { %>
+                      <img src="/images/rental.png" class="profile-img toggle-align">
+                      <%  }  else if (p.postTypes == "Advisory") { %>
+                        <img src="/images/advisory.png" class="profile-img toggle-align">
+                        <%  }else { %>
+                          <img src="/images/training.png" class="profile-img toggle-align">
+                        <%  }  %>
+            </div>
+            <div class="account-list-grp-title">
+              <div> <a href="/post/<%=p.id %>/<%=userId %>"> <h4><%= p.name %></h4> </a>
+                <%= p.profile.name %>
+              </div>  
+           </div>
+            <%if (p.credentialOffer == true)  { %>
+            <img src="/images/checkmark.svg" class="profile-img">
+            <% }else{ %>    
+                            
+              <%  }  %>      
+            <div class="account-list-div" style="margin-left: 20px;">              
+                  <img src="<%= p.profile.profileImage %>" class="profile-img">                
+           </div> 
+            <div class="account-list" style="margin-left: 20px;">             
+              <% groups.forEach( group => { 
+                if(p.ssgroupId === group.id){ %>
+                  <img src= "<%= group.groupImage %>" class="profile-img">               
+                <%  }  
+              }); %> 
+            </div>           
+        </li>
+        <% } });
+         } else { %>
+            <h4> There are no community posts yet. Please join a <a onclick="navigateDiscover('<%= userId %>')" >group</a> to view posts. </h4>
+            <script>
+              function navigateDiscover(userId){
+                var discover='discover';
+                location.href="/group/"+userId+"/"+discover;
+              }
+            </script>
+          <% } %>
+      </ul>
+   </div>
+</div>
+</body>
+</html>

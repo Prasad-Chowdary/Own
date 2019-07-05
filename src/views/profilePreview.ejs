@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>profile-preview</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+	<link rel="stylesheet" type="text/css" href="/css/group.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+	<script>
+		function sharePage(url) {
+			newwindow = window.open(url, "name", "height=350,width=400,scrollbars=yes");
+			if (window.focus) {
+				newwindow.focus();
+			}
+			return false;
+		}
+		$("document").ready(function () {
+			setTimeout(function () {
+				$("div.alert").remove();
+			}, 3000); // 5 secs
+
+		});
+		if ( window.history.replaceState ) {
+		  window.history.replaceState( null, null, window.location.href );
+		 }
+	</script>
+</head>
+<body>
+	
+	<% var current= 'account' %>
+	<%- include ./partials/head  %>
+
+	<form action="/account/<%= userId %>" style="margin-left: 400px; margin-right: 400px; margin-top:80px" method="POST"
+		id="cprfForm" enctype="multipart/form-data">
+		<input type="hidden" name="userId" value="<%=userId%>">
+		<% if (typeof profileSuccessMessage != 'undefined' && profileSuccessMessage) { %>
+		<div class="alert alert-success alert-dismissible" id="myAlert">
+			<a href="#" class="close">&times;</a>
+			<%- profileSuccessMessage %></div>
+		<% }%>
+		<div class="col-md-12 mb40">
+			<div class="grp-image-left"><img src="<%=profile.profileImage %>" class="group-preview-img"></div>
+			<div class="grp-image-desc">
+				<h3><b><%= profile.name %></b></h3>
+				<h4><b><%= user.firstName%> <%=user.lastName %></b></h4>
+			</div>
+			<div class="post-image-desc">
+				<%if (profile.bussinessUrl != null)  { %>
+				<h5><b> Business URL: </b><a href="<%= profile.bussinessUrl %>" target="_blank"> <%= profile.bussinessUrl %>
+					</a> </h5>
+				<%  } %>
+			</div>
+			<div class="post-image-desc">
+				<% if(attachedCredential.length > 0) { %>
+					<h5><b> Credential Aquired : </b></h5>	
+					<%	attachedCredential.forEach(cr =>{							
+				   const Jsondata = JSON.parse(cr.credential);  %>				  
+					<a href="/show-certificate/<%= userId %>/<%= cr.postId %>" > <%=Jsondata.badge.name %> </a>   
+				<%  }); } %>
+			</div>
+		</div>
+		<div class="col-md-12">
+			<a href="javascript:void(0)" onclick="sharePage('https://www.linkedin.com/shareArticle?mini=true&url=<%= shareLink %>');"
+				title="Linkedin Share" target="_blank" class="fa fa fa-linkedin" aria-hidden="true"
+				style="float: right;margin-left: 30px">
+			</a>
+			<a href="javascript:void(0)" onclick="sharePage('https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=&su=<%= profile.name %>&body= Please check out my profile <%= shareLink %>&ui=2&tf=1&pli=1');" title="Email Share"
+				target="_blank" class="fa fa-envelope fa-share" aria-hidden="true" style="float: right;margin-left: 30px">
+			</a>
+
+			<a href="javascript:void(0)" data-vars-storyid="1555635877747" data-vars-icontype="facebook"
+				onclick="sharePage('http://www.facebook.com/sharer/sharer.php?t=<%= profile.name %>&u=<%= shareLink %>');" title="Facebook Share"
+				class="fa fa-facebook" aria-hidden="true" style="float: right;margin-left: 30px"></a>
+
+			<a href="javascript:void(0)" data-vars-icontype="twitter" data-vars-storyid="1555635877747"
+				onclick="sharePage('https://twitter.com/share?url=<%= shareLink %>&text=@<%= profile.name %>. Please check out this link ');" title="Tweet" class="fa fa-twitter"
+				aria-hidden="true" style="float: right;margin-left: 30px"></a>
+		</div>
+		<div class="col-md-12">
+			<h5><%= profile.description %> </h5>
+		</div>
+		<% if (profiledetail == 'yes') { %>
+		<input type="submit" value="Submit" style="margin-top: 20px;">
+		<input type="button" value="Edit" onclick="location.href = 'http://localhost:3000/edit-profile/<%=profile.id%>';"
+			style="margin-left:100px">
+		<% } else { %>
+
+		<input type="submit" value="Ok" style="margin-top: 20px; text-align: center">
+		<% } %>
+	</form>
+</body>
+</html>

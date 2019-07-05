@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title><%= title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/account.css">
+</head>
+<body>       
+    <main>
+        Please enter the details of the post.
+
+        <form action="postservice/<%= userId %>" method = "POST" id="cprfForm" enctype="multipart/form-data">
+            <input type="hidden" name="userId"  value= "<%=userId%>">
+            <p>Name <input type="text" name="Name"></p>
+            <p>Description <input type="text" rows=4, columns=50 name="Desc"></p>
+            <p>Attach profile <input type="text" name="AttachedProfileLink"></p>
+            <p>Postal Code <input type="text" name="PostalCode"></p>
+            <p>Promotion Type<input type="text" name="PromotionType"></p>
+            <p>Promotion Description <input type="text" rows=4, columns=50 name="Desc"></p>
+            <p>postThumnail <input type="file" name="image" id="image"></p>
+            <p>From <input type="text" name="FromDate"></p>
+            <p>To <input type="text" name="ToDate"></p>        
+        
+            <p><button type="submit"> Create Profile</button></p>            
+        </form>
+    </main>
+</body>
+</html>

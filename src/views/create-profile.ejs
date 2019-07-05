@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title><%= title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <main>
+        Please enter the details of the profile.
+
+        <form action="create-profile-form/<%= userId %>" method = "POST" id="cprfForm" enctype="multipart/form-data">
+            <input type="hidden" name="userId"  value= "<%=userId%>">
+            <p>Name <input type="text" name="Name"></p>
+            <p>Goal <input type="textarea" rows=4, columns=50 name="Goal"></p>
+            <p>Eye on Canada link <input type="text" name="EyeOnCanadaLink"></p>
+            <p>Postal Code <input type="text" name="PostalCode"></p>
+            <p>Key Words <input type="text" name="Keywords"></p>
+            <p>Description <input type="text" rows=4, columns=50 name="Desc"></p>
+            <p>Profile Picture <input type="file" name="image" id="image"></p>
+            <p></p>
+            <p>Please select the types of posts you are interested in offering. </p>            
+            <%  var postTypeCount = 0;
+                posttypes.forEach( p => { 
+                    var pstName = "PostType_" + p.name %>
+                <p>
+                        <input type="checkbox" name="<%= pstName %>" > <%= p.name %>><br>
+                </p>
+            <% }) %>       
+            <p><button > Create Profile</button></p>
+        </form>
+    </main>
+</body>
+</html>

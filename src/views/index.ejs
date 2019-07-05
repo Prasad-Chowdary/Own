@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Skill Squirrel Login</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript"></script>
+</head>
+
+<body>
+  <div class="container container-first">
+    <div class="row">
+      <div class="col-sm-6 left-image">
+        <img src="images/SkSq_FirstPageImage.jpeg" alt="Squirrel">
+      </div>
+      <div class="col-sm-6 logo-img">
+        <div style="height:30%;">
+          <img src="images/Skill Squirrel LOGO vert PURPLE.png" alt="Squirrel" style="width:170px;">
+        </div>
+        <div class="login-form-div">
+          <form name="myform" style="padding: 20px 110px" action="login" method="POST"
+            onsubmit="return ValidationEvent()">
+
+            <% if(successMessage != undefined || sucessMessage != null) {%>
+            <p>
+              <font size="2" color="green"><b><%= successMessage %></b></font>
+            </p>
+            <% }%>
+            <% if(errMessage != undefined || errMessage != null) {%>
+            <p>
+              <font size="2" color="red"><b><%= errMessage %></b></font>
+            </p>
+            <% }%>
+            <div class="form-group">
+              <input type="email" class="login-input" placeholder="Email" name="Email"  id="txtEmail"
+                onchange='Javascript:checkEmail();' required>
+              <p id="emailError" class="error-message"></p>
+              <script>
+                function checkEmail() {
+                  document.getElementById("emailError").innerHTML = "";
+                  var email = document.getElementById('txtEmail');
+                  var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+
+                  if (!filter.test(email.value)) {
+                    document.getElementById("emailError").innerHTML = "This Email dosn't appear to be valid ";
+                    return false;
+                  }
+                }
+              </script>
+            </div>
+            <div class="form-group">
+              <input type="password" id="password" class="login-input" placeholder="Password" name="Password"
+                onchange='Javascript:validate()' required>
+              <p id="passwordError" class="error-message"></p>
+            </div>
+            <script>
+              function validate() {
+                document.getElementById("passwordError").innerHTML = "";
+                var Password = document.getElementById('password');
+                var filter = /^(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{7,30}$/;
+                if (!filter.test(Password.value)) {
+                  document.getElementById("passwordError").innerHTML = "Please enter a valid password ";
+                }
+              }
+            </script>
+            <div class="form-group">
+              <button type="submit" class="btn login-btn">Log in</button>
+            </div>
+            <div class="form-group">
+              <button type="button" onclick="location.href='/signup';" class="btn sign-btn">Sign up</button>
+            </div>
+            <div class="form-group">
+              <button type="button"  onclick="location.href='/guest-login';" class="btn guest-btn">Continue as a Guest</button>
+            </div>
+          </form>
+          <script>
+            function ValidationEvent() {
+
+              var Email = document.getElementById("txtEmail").value;
+              var Password = document.getElementById("password").value;
+
+              var emailReg = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+              var passwordReg = /^(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{7,30}$/;
+
+              if (!Email.match(emailReg)) {                
+                document.getElementById("emailError").innerHTML = "Not a registered email try again";         
+                return false;
+              }else if(!Password.match(passwordReg)){
+                document.getElementById("passwordError").innerHTML = "Wrong email or password. Try again or click SIGNUP to reset it.";				
+                  return false;
+                }else {
+                return true;
+              }
+            }           
+          </script>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

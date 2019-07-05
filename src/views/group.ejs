@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title><%= title %></title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="/css/group.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+  <% var current= 'groups' %> <%- include ./partials/head %>
+
+  <div class="container account-contain profile-post-padding">
+    <ul class="nav nav-tabs ">
+      <% if(previousPage === 'discover'){ %>
+      <li class="account-tab-li"><a data-toggle="tab" href="#mygroup">My Groups</a></li>
+      <li class="active account-tab-li"><a data-toggle="tab" href="#discover">Discover</a></li>
+      <% }else { %>
+      <li class="active account-tab-li"><a data-toggle="tab" href="#mygroup">My Groups</a></li>
+      <li class="account-tab-li"><a data-toggle="tab" href="#discover">Discover</a></li>
+      <% } %>
+    </ul>
+
+    <div class="tab-content">
+      <% if(previousPage === 'discover'){ %>
+      <div id="mygroup" class="tab-pane fade">
+        <% }else { %>
+        <div id="mygroup" class="tab-pane fade in active">
+          <% } %>
+          <div class="account-create-div">
+            <% if (user.isGuest === true){ %>
+            <a href="" class="account-create" data-toggle="modal" data-target="#myModal">
+              <h4>Create</h4>
+            </a>
+            <div class="modal fade" id="myModal" role="dialog">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-body">
+                    <p> Only account holders may create groups, would you like to create an account now? </p>
+                    <div class="model-buttons" style="text-align: center;">
+                      <button type="button" style="width: 100px;"><a href="/index">Yes</a></button>                     
+                      <button type="button" style="width: 100px;"><a href="">No,Thanks</a></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <% } else { %>
+            <a href="/create-group/<%= userId %>" class="account-create">
+              <h4>Create</h4>
+            </a>
+            <% } %>
+          </div>
+          <ul class="list-group account-underlist">
+            <% if(groups && groups.length > 0) { groups.forEach( grp => { %>
+
+            <li class="list-group-item list-box">
+              <div class="account-list-div">
+                <img src="<%=grp.groupImage %>" class="profile-img" />
+              </div>
+              <div class="account-list-grp-title" style="height: 40px;">
+                <div>
+                  <h4><b><%= grp.tradename %></b></h4>
+                </div>
+                <div>
+                  <h4><%= grp.name %></h4>
+                </div>
+              </div>
+              <div class="account-list-div"></div>
+              <div class="account-list-div">
+                <%if (userId == grp.ownerId ) { %>
+                <a href="/manage-group/<%= grp.id %>" class="btn btn-info manage-button" role="button">Manage</a>
+                <% } %>
+              </div>
+            </li>
+            <% }); } else { %>
+            <h4>You have not created any groups yet.</h4>
+            <% } %>
+          </ul>
+        </div>
+
+        <% if(previousPage === 'discover'){ %>
+        <div id="discover" class="tab-pane fade in active">
+          <% }else { %>
+          <div id="discover" class="tab-pane fade">
+            <% } %>
+            <div class="form-group has-feedback has-search">
+              <span class="glyphicon glyphicon-search form-control-feedback"></span>
+              <input type="text" class="form-control" placeholder="Search" />
+            </div>
+
+            <ul class="list-group account-underlist">
+              <% if(allGroups && allGroups.length > 0) { allGroups.forEach( grp =>
+            {
+              allProfiles.forEach( profile=>{ 
+                if(grp.id === profile.ssgroupId){
+                  if(profile.name != null){  %>
+
+              <li class="list-group-item list-box">
+                <div class="account-list-div">
+                  <img src="<%=grp.groupImage %>" class="profile-img" />
+                </div>
+                <div class="account-list-grp-title" style="height: 40px;">
+                  <div>
+                    <a href="/view-group/<%= userId %>/<%= grp.id %>">
+                      <h4><%= grp.name %></h4>
+                    </a>
+                  </div>
+                </div>
+                <div class="account-list-div"></div>
+              </li>
+              <% } } }) }); } else { %>
+              <h4>
+                There are no groups to discover yet. Please
+                <% if (user.isGuest === true){ %>
+                <a href="" class="account-create" data-toggle="modal" data-target="#myGroupModal">
+                  create</a> a group for others to discover and join.
+                <div class="modal fade" id="myGroupModal" role="dialog">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-body">
+                        <p> Only account holders may create groups, would you like to create an account now?</p>
+                          <div class="model-buttons" style="text-align: center;">
+                            <button type="button" style="width: 100px;"><a href="/index">Yes</a></button>                     
+                            <button type="button" style="width: 100px;"><a href="">No,Thanks</a></button>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <% } else { %>
+                <a href="/create-group/<%= userId %>">create</a> a group for
+                others to discover and join.
+                </a>
+                <% } %>
+              </h4>
+              <% } %>
+            </ul>
+          </div>
+        </div>
+      </div>
+</body>
+</html>

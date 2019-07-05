@@ -1,0 +1,130 @@
+
+.list-group-item{
+  min-height: 100px;
+}
+/* .list-box{
+    min-height: 115px;
+    display: inline-block;
+    overflow: auto;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+} */
+.container-first{
+  background:#613393; 
+}
+.container-first-logo{  
+  float: left;
+  height: 50px;
+} 
+
+.container-main{
+  width:100%;
+
+}
+.morecontent span {
+  display: none;
+}
+.morelink {
+  display: block;
+}
+.bg-purple{
+  background: #613393;
+}
+.pull-right{
+  float: right;
+}
+.primary-lightGrey{
+  color:#D6D1CA;
+}
+.main-header{
+    padding-left: 15px;
+    padding-right: 15px;
+}
+/* account page*/
+
+.account-contain{
+     width: 100%;
+     margin-top: 100px;
+}
+.account-tab-li{
+    width: 50%;
+    text-align: center;
+    background-color: #D6D1CA;
+    color: black;
+    font-size: 20px;
+  }
+.account-tab-li a{
+ color: black;
+}
+.inline { 
+display: inline-block; 
+float: left;
+margin:10px;
+}
+.profile-img{
+	width: 60px;
+}
+
+.profile-post-padding{
+	padding-left: 90px;
+    padding-right: 90px;
+}
+
+.account-underlist{
+	margin-top: 20px;
+}
+.account-list-div{
+	width: 20%; 
+	float: left;
+}
+.account-list-grp-title{
+	width: 40%; 
+	float: left;
+}
+.account-create-div{
+	padding: 0px 50px;
+	margin-top: 20px;
+}
+.account-create{
+	color: red;
+	text-align: right;
+}
+ .manage-button{
+  float: right; 
+  color: white; 
+  background-color: #F15A29;
+ }
+.has-search .form-control-feedback {
+    right: initial;
+    left: 0;
+    color: #ccc;
+}
+.has-search .form-control {
+    padding-right: 12px;
+    padding-left: 34px;
+}
+#showMe{
+  display:none;
+}
+.group-preview-img{
+  width: 150px;
+  height : 150px;
+} 
+.mb40{
+  margin-bottom:40px;
+} 
+.grp-image-left {
+    float:left;
+    width:40%;
+}
+.grp-image-desc{
+  float:left;
+  width:60%;
+}
+.squirrel-active-tab{
+  background-color : white;
+  color:black !important;
+ }
+.tab-pane{
+  color: dimgrey;
+}

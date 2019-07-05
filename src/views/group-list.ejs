@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title><%= title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">   
+</head>
+<body>
+    <main>   
+      <% if(typeof groups == "undefined") { %>
+        <p>You are not a member of any group. <a href="/group-list">Search Skill Squirrel to join a group </a>  OR <p><a href="/create-group/<%= userId %>">Create a new group</a>
+      <% } else if(groups.length == 0) { %>
+        <p>You are not a member of any group. <a href="/group-list">Search Skill Squirrel to join a group OR <a href="/create-group/<%= userId %>">Create a new group</a>
+        <% } else { %>
+            You belong to <%= groups.length %> group(s)
+            <ul>
+            <% groups.forEach( grp => { %>
+                <li>                      
+                    <a href="/group-details/<%= userId %>/<%= grp.id %>"> <%= grp.name %> </a>  &nbsp; &nbsp; &nbsp;    <%= grp.description %>
+                </li>
+            <% }) %>
+        </ul>
+        <% } %>    
+    </main>
+</body>
+</html>

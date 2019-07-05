@@ -1,0 +1,53 @@
+{
+    "development": {
+        "config_id": "development",
+        "app_name": "skillsquirrelapp",
+        "app_desc": "skillsquirrelapp desc",
+        "node_port": 3000,
+        "json_indentation": 4,
+        "GOOGLE_RECAPTCHA_SITE_KEY": "6Ld7_J0UAAAAAMMU3cA682Z-5T-hfdYEqO1cVIjz",
+        "GOOGLE_RECAPTCHA_SECRET_KEY_get_SignUP": "6Ld7_J0UAAAAAORvffMYL8gDqUsWcz1nzvFQGeij",
+        "GOOGLE_RECAPTCHA_SECRET_KEY_Verfication": "6Le6C6EUAAAAAFFf7lkZVWpFgVO0u7BE8hGJ23Dz",
+        "SENDGRID_API_KEY": "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",
+        "DB": {
+            "DBName": "skillsquirrel",
+            "userName": "root",
+            "password": "ipsg",
+            "host": "localhost",
+            "dialect": "mysql"
+        },
+        "redisData": {
+            "storage": "redis",
+            "host": "localhost",
+            "port": 6379,
+            "collection": "sessions",
+            "expire": 86400
+        },
+        "logFile": {
+            "errorFile": "../../logs/error.log",
+            "infoFile": "../../logs/info.log",
+            "debugFile": "../../logs/debug.log"
+        },
+        "certsPaths": {
+            "pathToSkillSquirrelCodebase": "/home/prasad/Documents/SkillSquirrel",
+            "pathToCertToolsConfFile": "/home/prasad/Documents/cert-tools/conf.ini",
+            "pathToCertTemplate": "/home/prasad/Documents/cert-tools/sample_data/certificate_templates/certificate_template.json",
+            "pathToRostersAttandeesFile": "/home/prasad/Documents/cert-tools/sample_data/rosters/attandees.csv",
+            "pathToCertToolsUnsignedCertsFolder": "/home/prasad/Documents/cert-tools/sample_data/unsigned_certificates",
+            "pathToCertIssuerCodebase": "/home/prasad/Documents/cert-issuer",
+            "pathToCertIssuerUnsignedCertsFolder": "/home/prasad/Documents/cert-issuer/data/unsigned_certificates",
+            "pathToCertIssuerBlockchainCertsFolder": "/home/prasad/Documents/cert-issuer/data/blockchain_certificates/"
+            },
+        "FilesToSave":"assets"
+    },
+    "testing": {
+        "config_id": "testing",
+        "DB": {
+            "password": "password"
+        }
+    },
+    "production": {
+        "config_id": "production",
+        "node_port": 8080
+    }
+}

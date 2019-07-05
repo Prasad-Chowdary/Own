@@ -1,0 +1,26 @@
+.form-align{
+  margin-left: 400px; 
+  margin-right: 400px;
+}
+.post-input-size{
+  margin: 20px;
+    width: 500px;
+}
+
+.cemera-div {
+  width: 50px;
+  text-align:center;
+  padding: 10px;
+  border:gray;
+  background-color: gray;
+  margin: 0;
+  margin-left: 10px;
+}
+.margin-left-align{
+  margin-left: 10px;
+}
+
+.preview-button{
+     color: grey;
+    width: 200px;
+}

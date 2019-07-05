@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>profile</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" type="text/css" href="/css/account.css" />
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+  <script>
+    var validateProfileName =true,
+        invalidProfile = true,
+        checkProfileURL = true,
+        checkPostalCode = true,
+        invalidPostal = true,
+        checkProfileImage,
+        invalidFile,
+        invalidkeyword = true,
+        invalidDesc = true,
+        popUpWarning = false;
+    $(document).ready(function () {
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+  </script>
+
+<body>
+  <% var current= 'account' %> <%- include ./partials/head %>
+
+  <div class="row">
+    <div class="col-md-8">
+      <form action="/edit-profile/<%= profile.id %>" method="POST" id="cprfForm" enctype="multipart/form-data"
+        onsubmit="return ValidationProfileEdit()">
+        <input type="hidden" name="userId" value="<%=userId%>" />
+        <div class="container" style="padding: 0px 300px;">
+          <h3>Edit <%=profile.name%></h3>
+          <div class="form-group">
+            <label for="name"><b>Profile Name * </b></label>
+            <input type="text" class="form-control" value="<%=profile.name%>" name="Name" id="profileName"
+              onchange="Javascript:ValidateProfileName()" required oninvalid="InvalidProfile(this);"
+              oninput="InvalidProfile(this);" autocomplete="off"/>
+            <p>Enter a unique profile name</p>
+            <p class="error-message" id="profileError"></p>
+            <script>
+              function ValidateProfileName() {
+                popUpWarning = true;
+                document.getElementById("profileError").innerHTML = "";
+                // var name = /^[a-zA-Z-,]+(\s{0,1}[a-zA-Z-, ])*$/;
+                var text = document.getElementById("profileName");
+                // if (!name.test(text.value)) {
+                  if(!text.value){
+                  document.getElementById("profileError").innerHTML =
+                    "Required Profile Name";
+                  text.style = "box-shadow: 0 0 5px 1px red";
+                  validateProfileName = false;
+                  return false;
+                } else {
+                  text.setCustomValidity("");
+                  text.style = "box-shadow: none";
+                  validateProfileName = true;
+                  return true;
+                }
+              }
+              function InvalidProfile(textbox) {
+                if (textbox.value === "") {
+                  textbox.setCustomValidity("Required Profile Name");
+                  textbox.style = "box-shadow: 0 0 5px 1px red";
+                  invalidProfile = false;
+                  return false;
+                } else {
+                  textbox.setCustomValidity("");
+                  textbox.style = "box-shadow: none";
+                  invalidProfile = true;
+                  return true;
+                }
+              }
+            </script>
+          </div>
+
+          <div class="form-group">
+            <label for="profile links"><b>Portfolio or Business URL </b></label>
+            <input type="text" class="form-control" value="<%=profile.bussinessUrl%>" name="BussinessUrl"
+              id="profileUrlCheck" onchange="Javascript:CheckProfileURL();" autocomplete="off"/>
+            <p id="urlError" class="error-message"></p>
+            <script>
+              function CheckProfileURL() {
+                popUpWarning = true;
+                document.getElementById("urlError").innerHTML = "";
+                var url = document.getElementById("profileUrlCheck");
+                var filter = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+                if (!filter.test(url.value)) {
+                  document.getElementById("urlError").innerHTML = "Please enter valid profile URL";
+                  document.getElementById("profileUrlCheck").style = "box-shadow: 0 0 5px 1px red";
+                  checkProfileURL = false;
+                  return false;
+                }else{
+                  document.getElementById("profileUrlCheck").style = "box-shadow: none";
+                  checkProfileURL = true;
+                  return true;
+                }
+              }
+            </script>
+          </div>
+          <div class="form-group">
+            <label for="psc"><b>Postal Code * </b></label>
+            <input type="text" class="form-control" value="<%=profile.postalCode%>" name="PostalCode"
+              id="postalcodecheck" onchange="Javascript:CheckPostalCode();" required oninvalid="InvalidPostal(this);"
+              oninput="InvalidPostal(this);" autocomplete="off"/>
+            <p id="codeError" class="error-message"></p>
+            <script>
+              function CheckPostalCode() {
+                popUpWarning = true;
+                document.getElementById("codeError").innerHTML = "";
+                var code = document.getElementById("postalcodecheck");
+                var filter = /^\d{5}-\d{4}|\d{5}|[A-Z]\d[A-Z] \d[A-Z]\d|[0-9]{6}|[A-Za-z]{1,2}[\d]{1,2}([A-Za-z])?\s?[\d][A-Za-z]{2}$/;
+                if (!filter.test(code.value)) {
+                  document.getElementById("codeError").innerHTML =
+                    "Please enter valid Postal Code";
+                  code.style = "box-shadow: 0 0 5px 1px red";
+                  checkPostalCode = false;
+                  return false;
+                } else {
+                  code.setCustomValidity("");
+                  code.style = "box-shadow: none";
+                  checkPostalCode = true;
+                  return true;
+                }
+              }
+              function InvalidPostal(textbox) {
+                if (textbox.value === "") {
+                  textbox.setCustomValidity("Required Postal code");
+                  textbox.style = "box-shadow: 0 0 5px 1px red";
+                  invalidPostal = false;
+                  return false;
+                } else {
+                  textbox.setCustomValidity("");
+                  textbox.style = "box-shadow: none";
+                  invalidPostal = true;
+                  return true;
+                }
+              }
+            </script>
+          </div>         
+          <div class="form-group">
+            <div class="card" style=" border: 1px solid silver;border-radius: 5px;padding:5px">
+              <label for="Image" style="width:50%;"><b>Profile Image * 
+                <img
+                    src="https://img.icons8.com/ios/20/000000/about-filled.png" data-toggle="tooltip"
+                    title="Image Size should be MAX(400x400 pixels)!"></b></label>
+              <div style="background-color: #c3bbbb;float: right;">                
+                <img id="output" src="<%=profile.profileImage%>" height="50" />
+              </div>
+              <input type="file" name="image" id="profileimage" value="<%=profile.profileImage%>"
+                onchange="Javascript:CheckProfileImage(event);" required oninvalid="InvalidFile(this);"
+                oninput="InvalidFile(this);" />
+              <p id="fileError" class="error-message"></p>
+              <script>
+                function CheckProfileImage(event) {
+                  popUpWarning = true;
+                  var output = document.getElementById("output");
+                  output.src = URL.createObjectURL(event.target.files[0]);
+
+                  document.getElementById("fileError").innerHTML = "";
+                  var file = document.getElementById("profileimage");
+                  var filter = /\.(jpe?g|png|gif|bmp|svg)$/i;
+                  if (!filter.test(file.value)) {
+                    document.getElementById("fileError").innerHTML =
+                      "Please select a valid image or file";
+                    file.style = "box-shadow: 0 0 5px 1px red";
+                    checkProfileImage = false;
+                    return false;
+                  } else {
+                    file.setCustomValidity("");
+                    file.style = "box-shadow: none";
+
+                    output.onload = function () {
+                    var height = this.naturalHeight;
+                    var width = this.naturalWidth;
+                    if (height > 400 && width > 400) {
+                      document.getElementById("fileError").innerHTML = "Uploaded Group Icon should be MAX(400x400 pixels)";
+                      file.style = "box-shadow: 0 0 5px 1px red";
+                      checkProfileImage = false;
+                      return false;
+                    } else {
+                      file.setCustomValidity('');
+                      file.style = "box-shadow: none";
+                      checkProfileImage = true;
+                      return true;
+                    }
+                  };
+                  }
+                  
+                }
+                function InvalidFile(file) {
+                  if (file.value === "") {
+                    file.setCustomValidity("Required Postal code");
+                    file.style = "box-shadow: 0 0 5px 1px red";
+                    invalidFile = false;
+                    return false;
+                  } else {
+                    file.setCustomValidity("");
+                    file.style = "box-shadow: none";
+                    invalidFile = true;
+                    return true;
+                  }
+                }
+              </script>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="name"><b>Profile keywords separated by commas *</b></label>
+            <input type="text" class="form-control" value="<%=profile.keyWords%>" name="Keywords" required
+              oninvalid="Invalidkeyword(this);" oninput="Invalidkeyword(this);" 
+              onchange="popUpWarning = true;" autocomplete="off"/>
+            <script>
+             function Invalidkeyword(keyword) {
+              if (keyword.value === "") {
+                keyword.setCustomValidity("Required Keywords");
+                keyword.style = "box-shadow: 0 0 5px 1px red";
+                invalidkeyword = false;
+                return false;
+              } else {
+                keyword.setCustomValidity("");
+                keyword.style = "box-shadow: none";
+                invalidkeyword = true;
+                return true;
+              }
+            }
+            </script>
+          </div>
+
+          <div class="form-group">
+            <label for="profile links"><b>Attach a Credential : </b></label>
+            <select class="form-control" name="credentialId" onchange="popUpWarning = true;" >			 
+              <option value="">select a claimed credential</option>
+              <% if(userCredentials && userCredentials.length >= 0) { 
+                userCredentials.forEach( claimedCredential => {                
+                  Jsondata = JSON.parse(claimedCredential.credential);  %>            
+                  <option value="<%= claimedCredential.id %>"><%=Jsondata.badge.name %> </option>
+                <% }); } else { %>
+                <input  type="text"/>
+                <% } %>
+            </select>
+            </div>   
+
+          <div class="form-group">
+            <label for="desc"><b>Description *</b></label>
+            <textarea type="text" name="Desc" class="form-control" cols="40" rows="5"
+              required oninvalid="InvalidDesc(this);" oninput="InvalidDesc(this);" 
+              onchange="popUpWarning = true;" autocomplete="off"><%=profile.description%></textarea>
+            <script>
+              function InvalidDesc(desc) {
+                if (desc.value === "") {
+                  desc.setCustomValidity("Required Description");
+                  desc.style = "box-shadow: 0 0 5px 1px red";
+                  invalidDesc = false;
+                  return false;
+                } else {
+                  desc.setCustomValidity("");
+                  desc.style = "box-shadow: none";
+                  invalidDesc = true;
+                  return true;
+                }
+              }
+            </script>
+          </div>
+          <h3>Post Types</h3>
+          <p>Types of posts are you intrested in offering</p>
+          <div class="form-group input-align">
+            <% var postTypeCount = 0; posttypes.forEach( p => { var pstName =
+            "PostType_" + p.name %> <%if (pstName == "PostType_" + "Event") { %>
+            <input type="checkbox" name="<%= pstName %>" onchange="popUpWarning = true;" /> <%= p.name %><br />
+            <% }else if (pstName == "PostType_" + "Training") { %>
+            <input type="checkbox" name="<%= pstName %>" onchange="popUpWarning = true;" /> <%= p.name %><br />
+            <% } else { %>
+            <input type="checkbox" name="<%= pstName %>" disabled onchange="popUpWarning = true;" /> <%= p.name
+            %><br />
+            <% } %> <% }) %>
+          </div>
+          <div class="row form-group input-align">
+            <button type="submit" class="col-md-4 btn sign-btn" id="editProfileBtn" style="margin:5px">
+              Save
+            </button>
+            <a class="col-md-4 btn sign-btn btn-danger" id="DeleteProfileBtn" data-toggle="modal" data-target="#deleteProfile" style="margin:5px">
+              Delete
+            </a>
+            <!-- Modal -->
+            <div id="deleteProfile" class="modal fade" role="dialog">
+              <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Delete Profile</h4>
+                  </div>
+                  <div class="modal-body">
+                    <p>Confirm Delete profile <b>"<%=profile.name%>"</b>.</p>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="location.href='/inactive-profile/<%= profile.id %>/<%=userId%>'">Confirm</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-md-2" style="margin-top: 20px; margin-left:20px">
+      <% if( group.length >0) { 
+            group.forEach( grp => { %>
+      <img  src="<%=grp.groupImage%>" height="75" />
+      <% }); }  %>
+    </div>
+  </div>
+  <script>
+    window.onbeforeunload = function(e) {
+			debugger;
+			if(popUpWarning)
+				return e.returnValue = 'If you leave this page, Changes may not be saved.';
+		};
+    function ValidationProfileEdit() {
+      window.onbeforeunload = null;
+      var Name = document.getElementById("profileName").value;     
+      var PostalCode = document.getElementById("postalcodecheck").value;
+      var image = document.getElementById("profileimage").value;
+      var BussinessUrl = document.getElementById("profileUrlCheck").value;
+
+     // var nameReg = /^[a-zA-Z-,]+(\s{0,1}[a-zA-Z-, ])*$/;
+      var urlReg = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+      var codeReg = /^\d{5}-\d{4}|\d{5}|[A-Z]\d[A-Z] \d[A-Z]\d|[0-9]{6}|[A-Za-z]{1,2}[\d]{1,2}([A-Za-z])?\s?[\d][A-Za-z]{2}$/;
+      var imageReg = /\.(jpe?g|png|gif|bmp|svg)$/i;
+
+     // if (!Name.match(nameReg)) {
+      if(!Name){
+        document.getElementById("profileError").innerHTML =
+          "Required Profile Name";
+        return false;
+      } else if(BussinessUrl){
+          if (!BussinessUrl.match(urlReg)) {
+            document.getElementById("profileUrlCheck").innerHTML = "Invalid URl...!";
+            return false;
+          }
+      }else if (!PostalCode.match(codeReg)) {
+        document.getElementById("codeError").innerHTML =
+          "Invalid Postal Code...!";
+        return false;
+      } else if (!image.match(imageReg)) {
+        document.getElementById("fileError").innerHTML =
+          "Please select valid Image format...!";
+        return false;
+      } else if(!validateProfileName){
+        return false;
+      }else if(!invalidProfile){
+        return false;
+      }else if(!checkPostalCode){
+        return false;
+      }else if(!invalidPostal){
+        return false;
+      }else if(!checkProfileImage){
+        return false;
+      }else if(!invalidFile){
+        return false;
+      }else if(!invalidkeyword){
+        return false;
+      }else if(!invalidDesc){
+        return false;
+      }
+      else {
+        return true;
+      }
+    }
+  </script>
+</body>
+</head>
+
+</html>

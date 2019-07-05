@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>post-service-create</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="css/menu.css">
+	<link rel="stylesheet" type="text/css" href="/css/style.css">
+
+	<% var current= 'postRental' %>
+	<%- include ./partials/head  %>
+
+	<form action="/create-post/<%= userId %>" style="margin-left: 400px; margin-right: 400px" method="POST" id="cprfForm"
+		enctype="multipart/form-data">
+		<input type="hidden" name="userId" value="<%=userId%>">
+		<div class="account-create-div">
+			<a href="/account/<%= userId %>" class="account-create" href="">
+				<h4>Cancel</h4>
+			</a>
+		</div>
+		<h3>Create a Rental post</h3>
+		<div class="form-group">
+			<label for="name"><b>Post Name * : </b></label>
+			<input type="text" class="form-control input-size" id="postName" onchange='Javascript:validatePostName()'
+				name="Name" required>
+			<p class="error-message" id="postError"></p>
+			<script>
+				function validatePostName() {
+					document.getElementById("postError").innerHTML = "";
+					var name = /^[a-zA-Z-,]+(\s{0,1}[a-zA-Z-, ])*$/;
+					var text = document.getElementById('postName');
+					if (!name.test(text.value)) {
+						document.getElementById("postError").innerHTML = "Invalid characters found in the rental post name ";
+					}
+				}
+			</script>
+		</div>
+		<div class="form-group">
+			<p><b>Post Image </b><br><i class="fa fa-camera" aria-hidden="true"></i></p>
+			<input type="file" name="image" id="image">
+		</div>
+		<div class="form-group hidden">
+			<input type="text" value="Rental" name="PostType">
+		</div>
+		<div class="form-group">
+			<label for="profile links"><b>Attach a Profile : </b></label>
+			<select class="form-control" name="AttachedProfileLink">
+				<option value=""></option>
+				<% if(profiles && profiles.length >= 0) { 
+							profiles.forEach( p => { %>
+
+				<option value="<%= p.id %>"><%= p.name %></option>
+				<% });
+				} else { %>
+				<input type="text" placeholder="Profile" class="form-control" name="ServiceProfileLink">
+				<% } %>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="name"><b>Description : </b></label>
+			<input type="text" class="form-control" name="PDesc" required>
+		</div>
+		<div class="form-group">
+			<label for="desc"><b>Add Images : <i class="fa fa-camera" aria-hidden="true"></i></b></label>			
+		</div>
+		<div class="form-group">
+			<label for="files"><b>Postal Code *</b></label>
+			<input type="text" class="form-control" name="PostalCode" id="postalcodecheck"
+				onchange='Javascript:checkPostalCode();' required>
+			<p id="codeError" class="error-message"></p>
+			<script>
+				function checkPostalCode() {
+					document.getElementById("codeError").innerHTML = "";
+					var code = document.getElementById('postalcodecheck');
+					var filter = /^\d{5}-\d{4}|\d{5}|[A-Z]\d[A-Z] \d[A-Z]\d|[0-9]{6}|[A-Za-z]{1,2}[\d]{1,2}([A-Za-z])?\s?[\d][A-Za-z]{2}$/;
+					if (!filter.test(code.value)) {
+						document.getElementById("codeError").innerHTML = "Please enter valid Postal Code";
+						return false;
+					}
+				}
+			</script>
+		</div>
+		<div class="form-group">
+			<label for="desc"><b>Promotion Duration : </b></label>
+			<p>Starts<input type="text" placeholder="13 july 2016" class="form-control" name="FromDate"></p>
+			<p>Ends<input type="text" placeholder="13 july 2016" class="form-control" name="ToDate"></p>
+		</div>
+		<input type="submit" value="Submit" style="margin-top: 20px;">
+	</form>
+</head>
+</html>

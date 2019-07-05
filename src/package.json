@@ -1,0 +1,52 @@
+{
+  "name": "skillsquirrelapp",
+  "version": "1.0.0",
+  "description": "Skill Squirrel Application",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "Skill",
+    "Squirrel",
+    "Cooperative",
+    "Skill",
+    "Squirrel",
+    "Certification"
+  ],
+  "author": "Shreesha Mahishi",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.3",
+    "csurf": "^1.9.0",
+    "csv-parser": "^2.3.0",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "express-recaptcha": "^5.0.0",
+    "express-session": "^1.16.0",
+    "express-sessions": "^1.0.6",
+    "lodash": "^4.17.11",
+    "log4js": "^4.2.0",
+    "multer": "^1.4.1",
+    "mysql2": "^1.6.5",
+    "nodemailer": "^6.1.0",
+    "nodemailer-sendgrid-transport": "^0.2.0",
+    "nodemon": "^1.19.0",
+    "radis": "^1.0.5",
+    "redis": "^2.8.0",
+    "req-flash": "0.0.3",
+    "request": "^2.88.0",
+    "sequelize": "^5.2.15",
+    "web3": "^1.0.0-beta.55"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "mocha": "^6.1.3",
+    "proxyquire": "^2.1.0",
+    "sequelize-mock": "^0.10.2",
+    "sequelize-test-helpers": "^1.1.0",
+    "sinon": "^7.3.1"
+  }
+}

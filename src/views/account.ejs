@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title><%= title %></title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/account.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script>
+    $("document").ready(function () {
+      setTimeout(function () {
+        $("div.alert").remove();
+      }, 3000); // 5 secs
+
+    });
+  </script>
+</head>
+
+<body>
+  <% var current= 'account' %>
+  <%- include ./partials/head  %>
+
+  <div class="container account-contain profile-post-padding">
+
+    <% if (typeof profileSuccessMessage != 'undefined' && profileSuccessMessage) { %>
+    <div class="alert alert-success alert-dismissible" id="myAlert">
+      <a href="#" class="close">&times;</a>
+      <%- profileSuccessMessage %></div>
+    <% }%>
+
+    <ul class="nav nav-tabs ">
+      <% if(switchTab !== 'post'){ %>
+        <li class="active account-tab-li"><a data-toggle="tab" href="#profile">Profiles</a></li>
+        <li class="account-tab-li"><a data-toggle="tab" href="#post">Posts</a></li>
+      <% } else { %>
+        <li class="account-tab-li"><a data-toggle="tab" href="#profile">Profiles</a></li>
+        <li class="active account-tab-li"><a data-toggle="tab" href="#post">Posts</a></li>
+      <% } %>
+    </ul>
+    <div class="tab-content">
+      <% if(switchTab !== 'post'){ %>
+        <div id="profile" class="tab-pane fade in active">
+      <%} else { %>
+        <div id="profile" class="tab-pane fade">
+      <% } %>    
+        <div class="account-create-div">
+            <% if (user.isGuest == true){ %>
+              <a href="" class="account-create" data-toggle="modal" data-target="#myModal">
+                  <h4>Create</h4>
+                </a>
+                <div class="modal fade" id="myModal" role="dialog">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-body">
+                        <p> Only account holders may create profiles, would you like to create an account now? </p>
+                        <div class="model-buttons" style="text-align: center;">
+                          <button type="button" style="width: 100px;"><a href="/index">Yes</a></button>                     
+                          <button type="button" style="width: 100px;"><a href="">No,Thanks</a></button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+          <% }else{%>
+            <a href="" class="account-create" data-toggle="modal" data-target="#exampleModal"> <h4>Create </h4> </a>   
+                    <div class="modal fade" id="exampleModal"  role="dialog">
+                                <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                       <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                         <h3 class="modal-title">Select a Profile Type</h3>
+                                    </div>
+                                    <div class="modal-body" style="padding: 0px">
+                                       <ul class="nav nav-pills nav-stacked">
+                                          <% if(groups && groups.length > 0) { 
+                                             groups.forEach( grp => { %>
+                                          <li style="text-align: center"><a href="/create-profile-group/<%= userId %>/<%= grp.id %>"
+                                               style="border-bottom:1px solid #ccc"><%=grp.name%></a></li>
+                                            <% }); } else{ %>
+                                                 <h4> You are not a member of any group</h4>   
+                                              <%   } %>
+                                           <li style="text-align: center"><a href="/create-profile-form/<%= userId %>" style="border-bottom:1px solid #ccc">Public</a></li>
+                                      </ul>
+                                   </div>
+                               </div>
+                            </div>
+                   </div>
+            <% } %>
+        </div>
+        <ul class="list-group account-underlist">
+
+          <% if(profiles && profiles.length > 0) { 
+                profiles.forEach( p => { 
+                  if(p.visible){ %>
+          <li class="list-group-item" style="min-height: 100px;">
+         <% }else { %>
+          <li class="list-group-item" style="cursor: not-allowed; background-color:#bfb9b9 ; min-height: 100px;padding-top: 20px;border: 1px solid #bfb9b9;">  
+            <% } %>
+            <div class="account-list-div"><img src="<%= p.profileImage%>" class="profile-img"></div>
+            <div class="account-list-grp-title">
+              <div> 
+               <% if(p.visible){ %>
+                <a href="/profile-view/<%=p.id %>/<%= userId %>" >
+                  <h4><%= p.name %></h4>
+                </a>
+                <% } else {%>
+                  <h4><%= p.name %></h4>
+                <% } %>
+              </div>
+            </div>
+            <div class="account-list col-md-2" style="margin-left: 20px;">
+              <% groups.forEach( group => { 
+                        if(p.ssgroupId === group.id){ %>
+              <img src="<%= group.groupImage %>" class="profile-img">
+              <%  }  
+                      }); %>
+            </div>
+            <div class="account-list-div toggle-align">
+              <div class="col-md-4">
+                <label class="switch">
+                  <% if(p.visible){ %>
+                  <input type="checkbox"  onclick="activeProfile(this,'<%= p.id %>')" checked=true> 
+                  <span class="slider round"></span>
+                  <% }else{ %>
+                    <input type="checkbox"  onclick="activeProfile(this,'<%= p.id %>')"> 
+                  <span class="slider round"></span>
+                  <% } %>
+                </label>
+                <script>
+                  function activeProfile(event,id){
+                    debugger;
+                    if(event.checked === true){
+                      location.href='/isVisible-profile/'+id+'/<%=userId%>/'+true;
+                    }else{
+                      location.href='/isVisible-profile/'+id+'/<%=userId%>/'+false;
+                    }
+                  }
+                  </script>
+              </div>
+            </div>
+            <div style="text-align: right">
+              <% if(p.visible){ %>
+                <a href="/edit-profile/<%= p.id %>">
+                  <h2 class="fa fa-edit">Edit </h2>
+                </a>
+              <% } else { %>
+                <h2 class="fa fa-edit">Edit </h2>
+              <% } %>
+            </div>
+          </li>
+          <% });
+               } else { %>
+          <h4> You have not created any profiles yet. </h4>
+          <% } %>
+        </ul>
+      </div>
+
+      <% if(switchTab !== 'post'){ %>
+        <div id="post" class="tab-pane fade">
+      <%} else { %>
+        <div id="post" class="tab-pane fade in active">
+      <% } %>   
+      
+        <div class="account-create-div">
+          <% if(profiles.length > 0 && user.isGuest == false) { %>
+          <a href="" class="account-create" data-toggle="modal" data-target="#myModal">
+            <h4>Create </h4>
+          </a>
+          <%  } %>
+          <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h3 class="modal-title">Select a Post Type</h3>
+                </div>
+                <div class="modal-body" style="padding: 0px">
+                  <ul class="nav nav-pills nav-stacked">
+                    <li class="disabled"><a href=""
+                        style="border-bottom:1px solid #ccc">Service</a></li>
+                    <li class="disabled"><a href=""
+                        style="border-bottom:1px solid #ccc">Rental</a></li>
+                    <li class="disabled"><a href=""
+                        style="border-bottom:1px solid #ccc">Advisory</a></li>
+                    <li><a href="/postEvent/<%= userId %>" style="border-bottom:1px solid #ccc">Event</a></li>
+                    <li><a href="/postTraining/<%= userId %>" style="border-bottom:1px solid #ccc">Training</a></li>
+                  </ul>
+                </div>
+                <div class="modal-footer">
+                  <a style="color:red" ; data-toggle="collapse" href="#demo" aria-hidden="true"
+                    aria-expanded="true/false">See More</a>
+                </div>
+                <div id="demo" class="collapse" style="margin-left:10px">
+                  <p><b> Service : </b>
+                    These posts advertise your hireable skills.</p>
+                  <p> <b> Rental : </b>
+                    These posts deal with any items or spaces you wish to share with others.</p>
+                  <p> <b> Event : </b>
+                    These posts showcase any upcoming events, courses, or workshops you are promoting.</p>
+                  <p> <b> Advisory : </b>
+                    These posts display your expertise that you wish to share with others—from a coffee to a work term.
+                  </p>
+                  <p> <b> Training : </b>
+                    These posts promote any work-based learning opportunities you are offering.</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <ul class="list-group account-underlist" style="list-style: none">
+            <% if(posts && posts.length > 0) {
+                posts.forEach( p => { 
+                  
+                  if(p.profile.visible){ 
+                    if(p.isActive){
+                    %>
+            <li class="col-md-12" style="min-height: 100px;padding-top: 20px;border: 1px solid #bfb9b9;">              
+              <% }else{ %>
+            <li class="col-md-12" style="cursor: not-allowed; background-color:#bfb9b9 ; min-height: 100px;padding-top: 20px;border: 1px solid #bfb9b9;">  
+              <% } }else{ %>
+                <li class="col-md-12" style="cursor: not-allowed; background-color:#bfb9b9 ; min-height: 100px;padding-top: 20px;border: 1px solid #bfb9b9;">  
+            <%  } %>
+              <div class="col-md-2"><img src="<%= p.postThumnail%>" class="profile-img"></div>
+              <div class="col-md-2">
+                <div> 
+                    <%  if(p.profile.visible){
+                      if(p.isActive){ %>
+                  <a href="/post/<%=p.id %>/<%=userId %>">
+                    <h4><%= p.name %></h4>
+                  </a>
+                    <% } else{ %>
+                      <h4><%= p.name %></h4>
+                      <% } }else{%>
+                        <h4><%= p.name %></h4>
+                     <% } %>
+                </div>
+                <!-- <% profiles.forEach( profile => { 
+                    if(profile.id === p.profileId){ %> -->
+                <div>
+                  <h5><%= p.profile.name %></h5>
+                </div>
+                <!-- <%  }  
+                   }); %> -->
+              </div>
+              <div class="col-md-2">
+                <%if (p.postTypes == "Service")  { %>
+                <p><b class="post-type">SERVICE </b><img src="/images/service.png" class="profile-img"></p>
+                <% }else if (p.postTypes == "Event") { %>
+                <p><b class="post-type">EVENT </b><img src="/images/event.png" class="profile-img"></p>
+                <%  } else if (p.postTypes == "Rental") { %>
+                <p><b class="post-type">RENTAL </b><img src="/images/rental.png" class="profile-img"></p>
+                <%  }  else if (p.postTypes == "Training") { %>
+                <p><b class="post-type">TRAINING </b><img src="/images/training.png" class="profile-img"></p>
+                <%  }  else if (p.postTypes == "Advisory") { %>
+                <p><b class="post-type">ADVISORY </b><img src="/images/advisory.png" class="profile-img"></p>
+                <%  }  %>
+              </div>
+              <div class="col-md-2">
+                <%if (p.credentialOffer == true)  { %>
+                <img src="/images/checkmark.svg" class="profile-img">
+                <% }%>
+              </div>
+              <div class="col-md-2">
+                <% groups.forEach( group => { 
+                        if(p.ssgroupId === group.id){ %>
+                <img src="<%= group.groupImage %>" class="profile-img">
+                <%  }  
+                      }); %>
+              </div>
+              
+              <div class="col-md-1">
+                <label class="switch">
+                  <%  if(p.profile.visible){ 
+                        if(p.isActive){%>       
+                          <input type="checkbox" onclick="activePost(this,'<%= p.id %>')" checked=true>
+                        <% }else{ %>
+                          <input type="checkbox" onclick="activePost(this,'<%= p.id %>')">
+                        <% }  
+                      }else{ %>
+                          <input type="checkbox" disabled style="cursor: not-allowed">
+                    <% } %>
+                  <span class="slider round"></span>
+                </label>
+                <script>
+                  function activePost(event,id){
+                    debugger;
+                    if(event.checked === true){
+                      location.href='/isActive-post/'+id+'/<%=userId%>/'+true;
+                    }else{
+                      location.href='/isActive-post/'+id+'/<%=userId%>/'+false;
+                    }
+                  }
+                  </script>
+              </div>
+            
+              <div class="col-md-1">
+                <%  if(p.profile.visible){ 
+                      if(p.isActive){%>       
+                <a href="/edit-post/<%= p.id %>" style="float: right;">
+                  <h2 class="fa fa-edit">Edit </h2>
+                </a>
+                <%  }else{ %>
+                      <h2 class="fa fa-edit">Edit </h2>
+                <% } }else{ %>
+                      <h2 class="fa fa-edit">Edit </h2>
+                <% } %>
+              </div>
+            </li>
+            <% });
+             } else { %>
+            <h4> You have not created any posts yet. </h4>
+            <% } %>
+          </ul>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

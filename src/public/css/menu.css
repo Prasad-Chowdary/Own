@@ -1,0 +1,26 @@
+
+.container-first{
+	background:#613393;	
+}
+.container-first-logo{	
+	float: left;
+	height: 50px;
+}	
+
+.container-main{
+	width:100%;
+
+}
+.bg-purple{
+	background: #613393;
+}
+.pull-right{
+	float: right;
+}
+.primary-lightGrey{
+	color:#D6D1CA;
+}
+.main-header{
+    padding-left: 15px;
+    padding-right: 15px;
+}

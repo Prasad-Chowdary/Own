@@ -1,0 +1,58 @@
+
+.container-first{
+	background:#613393;	
+}
+.container-first-logo{	
+	float: left;
+	height: 50px;
+}	
+.container-main{
+	width:100%;
+
+}
+.bg-purple{
+	background: #613393;
+}
+.pull-right{
+	float: right;
+}
+.primary-lightGrey{
+	color:#D6D1CA;
+}
+.main-header{
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.has-search .form-control-feedback {
+
+    right: initial;
+    left: 0;
+    color: #ccc;
+}
+
+.has-search .form-control {
+	margin-top: 50px;
+    padding-right: 12px;
+    padding-left: 34px;
+}
+#input{
+  background-image: url('voicerecord.svg'); /* Add a search icon to input */
+  background-position: right; /* Position the search icon */
+  background-repeat: no-repeat;
+  color: rgba(57 181 74); /* Do not repeat the icon image */
+  }
+ .account-underlist{
+	margin-top: 20px;
+}
+.account-list-div{
+	width: 20%; 
+	float: left;
+}
+.list-group-item{
+  min-height: 100px;
+}
+.account-list-grp-title{
+	width: 40%; 
+	float: left;
+}
+

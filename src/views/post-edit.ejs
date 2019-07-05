@@ -1,0 +1,1074 @@
+	<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>post-create</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Lato"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" href="css/menu.css" />
+    <link rel="stylesheet" type="text/css" href="/css/style.css" />
+    <script>
+      var validatePostName,
+        invalidPost,
+        checkProfileURL = true,
+        checkPostEditImage,
+        invalidFile,
+        invalidDesc,
+        checkJobURL = true,
+        checkPostalCode = true,
+        invalidPostal,
+        checkStartDateTime = true,
+        checkEndDateTime = true,
+        invalidDateTime = true,
+        checkGalleryImage = true,
+        popUpWarning = false;
+      $(document).ready(function() {
+        $('[data-toggle="tooltip"]').tooltip();
+      });
+    </script>
+  </head>
+  <% var current= 'account' %> <%- include ./partials/head %>
+  <div class="row">
+    <div
+      class="col-md-2"
+      style="margin-top: 20px; margin-left:20px;float: right;"
+    >
+      <% if(profiles && profiles.length >= 0) { profiles.forEach( p => {
+      if(post.profileId === p.id) { %>
+      <img src="<%=p.profileImage%>" height="75" />
+      <% }}); } %>
+    </div>
+    <div class="form-group">
+      <form
+        action="/edit-post/<%= post.id %>"
+        style="margin-left: 400px; margin-right: 400px"
+        method="POST"
+        id="cprfForm"
+        enctype="multipart/form-data"
+        onsubmit="return ValidationEvent()"
+      >
+        <input type="hidden" name="userId" value="<%=userId%>" />
+
+        <h3>Edit <%=post.postTypes%> Post</h3>
+        <div class="form-group">
+          <label for="name"><b>Post Name * : </b></label>
+          <input
+            type="text"
+            class="form-control input-size"
+            id="postName"
+            value="<%= post.name %>"
+            onchange="Javascript:ValidatePostName()"
+            name="Name"
+            required
+            oninvalid="InvalidPost(this);"
+            oninput="InvalidPost(this);"
+            autocomplete="off"
+          />
+          <p class="error-message" id="postError"></p>
+          <script>
+            function ValidatePostName() {
+              popUpWarning = true;
+              document.getElementById("postError").innerHTML = "";
+              // var name = /^[a-zA-Z-,]+(\s{0,1}[a-zA-Z-, ])*$/;
+              var text = document.getElementById("postName");
+              // if (!name.test(text.value)) {
+              if (!text) {
+                document.getElementById("postError").innerHTML =
+                  "Invalid characters found in the Training post name ";
+                text.style = "box-shadow: 0 0 5px 1px red";
+                validatePostName = false;
+                return false;
+              } else {
+                text.setCustomValidity("");
+                text.style = "box-shadow: none";
+                validatePostName = true;
+                return true;
+              }
+            }
+            function InvalidPost(textbox) {
+              if (textbox.value === "") {
+                textbox.setCustomValidity("Required Post Name");
+                textbox.style = "box-shadow: 0 0 5px 1px red";
+                invalidPost = false;
+                return false;
+              } else {
+                textbox.setCustomValidity("");
+                textbox.style = "box-shadow: none";
+                invalidPost = true;
+                return true;
+              }
+            }
+          </script>
+        </div>
+        <div class="form-group hidden">
+          <input
+            type="text"
+            value="<%= post.postThumnail %>"
+            name="previousUploadImg"
+          />
+        </div>
+
+        <% if(post.postTypes == "Event"){ %>
+        <div class="form-group">
+          <label for="event links"><b>Event URL</b></label>
+          <input
+            type="text"
+            class="form-control"
+            name="EventUrl"
+            value="<%= post.eventUrl%>"
+            id="profileUrlCheck"
+            onchange="Javascript:CheckProfileURL();"
+            autocomplete="off"
+          />
+          <p id="urlError" class="error-message"></p>
+          <script>
+            function CheckProfileURL() {
+              popUpWarning = true;
+              document.getElementById("urlError").innerHTML = "";
+              var url = document.getElementById("eventUrlCheck");
+              var filter = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+              if (!filter.test(url.value)) {
+                document.getElementById("urlError").innerHTML =
+                  "Please enter valid profile URL";
+                document.getElementById("eventUrlCheck").style =
+                  "box-shadow: 0 0 5px 1px red";
+                checkProfileURL = false;
+                return false;
+              } else {
+                document.getElementById("eventUrlCheck").style =
+                  "box-shadow: none";
+                checkProfileURL = true;
+                return true;
+              }
+            }
+          </script>
+        </div>
+        <% } %>
+        <div class="form-group">
+          <div
+            class="card"
+            style=" border: 1px solid silver;border-radius: 5px;padding:5px"
+          >
+            <label for="Image" style="width:50%;"
+              ><b
+                >Post Image *
+                <img
+                  src="https://img.icons8.com/ios/20/000000/about-filled.png"
+                  data-toggle="tooltip"
+                  title="Image Size should be MAX(400x400 pixels)!"/></b
+            ></label>
+            <div style="background-color: #c3bbbb;float: right;">
+              <img
+                id="postEditImage"
+                src="<%= post.postThumnail %>"
+                height="50"
+              />
+            </div>
+            <input
+              type="file"
+              name="image"
+              id="postimage"
+              value="<%= post.postThumnail %>"
+              onchange="Javascript:CheckPostEditImage(event);"
+              required
+              oninvalid="InvalidFile(this);"
+              oninput="InvalidFile(this);"
+            />
+            <p id="fileError_postImage" class="error-message"></p>
+            <script>
+              function CheckPostEditImage(event) {
+                popUpWarning = true;
+                var postEditImage = document.getElementById("postEditImage");
+                postEditImage.src = URL.createObjectURL(event.target.files[0]);
+
+                document.getElementById("fileError_postImage").innerHTML = "";
+                var file = document.getElementById("postimage");
+                var filter = /\.(jpe?g|png|gif|bmp|svg)$/i;
+                if (!filter.test(file.value)) {
+                  document.getElementById("fileError_postImage").innerHTML =
+                    "Please select a valid image or file";
+                  file.style = "box-shadow: 0 0 5px 1px red";
+                  checkPostEditImage = false;
+                  return false;
+                } else {
+                  file.setCustomValidity("");
+                  file.style = "box-shadow: none";
+
+                  postEditImage.onload = function() {
+                    var height = this.naturalHeight;
+                    var width = this.naturalWidth;
+                    if (height > 400 && width > 400) {
+                      document.getElementById("fileError_postImage").innerHTML =
+                        "Uploaded Group Icon should be MAX(400x400 pixels)";
+                      file.style = "box-shadow: 0 0 5px 1px red";
+                      checkPostEditImage = false;
+                      return false;
+                    } else {
+                      file.setCustomValidity("");
+                      file.style = "box-shadow: none";
+                      checkPostEditImage = true;
+                      return true;
+                    }
+                  };
+                }
+                
+              }
+              function InvalidFile(file) {
+                if (file.value === "") {
+                  file.setCustomValidity("Required Postal code");
+                  file.style = "box-shadow: 0 0 5px 1px red";
+                  invalidFile = false;
+                  return false;
+                } else {
+                  file.setCustomValidity("");
+                  file.style = "box-shadow: none";
+                  invalidFile = true;
+                  return true;
+                }
+              }
+            </script>
+          </div>
+        </div>
+        <div class="form-group">
+          <% if(post.draftPost !== true) { %>
+          <label for="profile links"><b>Attach a Profile : </b></label>
+          <select class="form-control" id="attach_profile" name="AttachedProfileLink" onchange="popUpWarning = true;">
+            <option value="<%= post.profileId %>"></option>
+            <% if(profiles && profiles.length >= 0) { 
+              profiles.forEach( p => { 
+                if(p.name !== null) { %>
+              <option value="<%= p.id %>"><%= p.name %></option>									
+            <%} });
+             } else { %>
+            <input
+              type="text"
+              placeholder="Profile"
+              class="form-control"
+              name="ServiceProfileLink"
+            />
+            <% } %>
+          </select>
+          <% }else{ %>
+          <div class="form-group hidden">
+            <input
+              type="text"
+              value="<%= post.profileId %>"
+              name="AttachedProfileLink"
+            />
+          </div>
+
+          <% } %>
+        </div>
+        <div class="form-group">
+          <label for="name"><b>Description *</b></label>
+          <textarea
+            type="text"
+            name="PDesc"
+            class="form-control"
+			id="post_description"
+            cols="40"
+            rows="5"
+            required
+            oninvalid="InvalidDesc(this);"
+            oninput="InvalidDesc(this);"
+            autocomplete="off"
+            onchange="popUpWarning = true;"
+          >
+          <%= post.postDescription %>
+        </textarea
+          >
+          <script>
+            function InvalidDesc(desc) {
+              if (desc.value === "") {
+                desc.setCustomValidity("Required Description");
+                desc.style = "box-shadow: 0 0 5px 1px red";
+                invalidDesc = false;
+                return false;
+              } else {
+                desc.setCustomValidity("");
+                desc.style = "box-shadow: none";
+                invalidDesc = true;
+                return true;
+              }
+            }
+          </script>
+        </div>
+
+        <% if(post.postTypes == "Event" || post.postTypes == "Training" ){ %>
+
+        <div class="form-group">
+          <label for="event links"><b>Webpage</b></label>
+          <input
+            type="text"
+            class="form-control"
+            name="WebpageUrl"
+            placeholder="Enter Profile URL"
+            value="<%=post.webPageUrl%>"
+            id="profileUrlCheck"
+            onchange="Javascript:CheckProfileURL();"
+            autocomplete="off"
+          />
+          <p
+            id="urlError"
+            class="col-md-12 error-message"
+            style="margin-left: 40%;"
+          ></p>
+          <script>
+            function CheckProfileURL() {
+              popUpWarning = true;
+              document.getElementById("urlError").innerHTML = "";
+              var url = document.getElementById("profileUrlCheck");
+              var filter = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+              if (!filter.test(url.value)) {
+                document.getElementById("urlError").innerHTML =
+                  "Please enter valid profile URL";
+                url.style = "box-shadow: 0 0 5px 1px red";
+                checkProfileURL = false;
+                return false;
+              } else {
+                url.style = "box-shadow: none";
+                checkProfileURL = true;
+                return true;
+              }
+            }
+          </script>
+        </div>
+
+        <% if(post.postTypes == "Event" ){ %>
+        <div class="form-group">
+          <label for="event links"><b>Link to reserve tickets</b></label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Enter Reserve Ticket URL"
+            value="<%=post.reserveTicketUrl%>"
+            name="ReserveticketsUrl"
+            id="jobUrlCheck"
+            onchange="Javascript:CheckJobURL();"
+            autocomplete="off"
+          />
+          <p id="jobError" class="error-message"></p>
+          <script>
+            function CheckJobURL() {
+              popUpWarning = true;
+              document.getElementById("jobError").innerHTML = "";
+              var url = document.getElementById("jobUrlCheck");
+              var filter = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+              if (!filter.test(url.value)) {
+                url.style = "box-shadow: 0 0 5px 1px red";
+                document.getElementById("jobError").innerHTML =
+                  "Please enter valid job posting URL";
+                checkJobURL = false;
+                return false;
+              } else {
+                url.style = "box-shadow: none";
+                checkJobURL = true;
+                return true;
+              }
+            }
+          </script>
+        </div>
+        <%} %> <% if(post.postTypes == "Training" ){ %>
+        <div class="form-group">
+          <label for="event links"><b>HashTag</b></label>
+          <input
+            type="text"
+            class="form-control"
+            name="HashTag"
+            placeholder="Hash Tag"
+            autocomplete="off"
+            onchange="popUpWarning = true;"
+          />
+        </div>
+        <div class="form-group">
+          <label for="event links"><b>Link to job posting</b></label>
+          <input
+            type="text"
+            class="form-control"
+            name="JobPostingUrl"
+            placeholder="Enter Job URL"
+            value="<%= post.jobPostingUrl %>"
+            id="jobUrlCheck"
+            onchange="Javascript:CheckJobURL();"
+            autocomplete="off"
+          />
+          <p id="jobError" class="error-message"></p>
+          <script>
+            function CheckJobURL() {
+              popUpWarning = true;
+              document.getElementById("jobError").innerHTML = "";
+              var url = document.getElementById("jobUrlCheck");
+              var filter = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+              if (!filter.test(url.value)) {
+                url.style = "box-shadow: 0 0 5px 1px red";
+                document.getElementById("jobError").innerHTML =
+                  "Please enter valid job posting URL";
+                checkJobURL = false;
+                return false;
+              } else {
+                url.style = "box-shadow: none";
+                checkJobURL = true;
+                return true;
+              }
+            }
+          </script>
+        </div>
+        <%} %>
+        <h4>Location:</h4>
+        <div class="form-group col-md-6">
+          <label for="inputAddress">Address</label>
+          <input
+            type="text"
+            class="form-control"
+			id="address"
+            name="Addresss"
+            value="<%= post.address %>"
+            placeholder="1234 Main St"
+            autocomplete="off"
+            onchange="popUpWarning = true;"
+          />
+        </div>
+        <div class="form-group col-md-6">
+          <label for="inputAddress2">Address 2</label>
+          <input
+            type="text"
+            class="form-control"
+			id="address2"
+            name="Addresss2"
+            value="<%= post.address2 %>"
+            placeholder="Apartment, studio, or floor"
+            autocomplete="off"
+            onchange="popUpWarning = true;"
+          />
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <label for="inputCity">City</label>
+            <input
+              type="text"
+              class="form-control"
+			  id="city"
+              name="City"
+              value="<%= post.city %>"
+              placeholder="CITY"
+              autocomplete="off"
+              onchange="popUpWarning = true;"
+            />
+          </div>
+          <div class="form-group col-md-4">
+            <label for="inputState">Province</label>
+            <input
+              type="text"
+              class="form-control"
+			  id="province"
+              name="Province"
+              value="<%= post.province %>"
+              placeholder="Province"
+              autocomplete="off"
+              onchange="popUpWarning = true;"
+            />
+          </div>
+          <div class="form-group col-md-4">
+            <label for="inputCountry">Country</label>
+            <input
+              type="text"
+              class="form-control"
+			  id="country"
+              name="Country"
+              value="<%= post.country %>"
+              placeholder="Country"
+              autocomplete="off"
+              onchange="popUpWarning = true;"
+            />
+          </div>
+          <div class="form-group">
+            <label for="files"><b>Postal Code *</b></label>
+            <input
+              type="text"
+              class="form-control"
+              name="PostalCode"
+              placeholder="12345"
+              value="<%= post.postalCode %>"
+              id="postalcodecheck"
+              onchange="Javascript:CheckPostalCode();"
+              required
+              oninvalid="InvalidPostal(this);"
+              oninput="InvalidPostal(this);"
+              autocomplete="off"
+            />
+            <p id="codeError" class="error-message"></p>
+            <script>
+              function CheckPostalCode() {
+                popUpWarning = true;
+                document.getElementById("codeError").innerHTML = "";
+                var code = document.getElementById("postalcodecheck");
+                var filter = /^\d{5}-\d{4}|\d{5}|[A-Z]\d[A-Z] \d[A-Z]\d|[0-9]{6}|[A-Za-z]{1,2}[\d]{1,2}([A-Za-z])?\s?[\d][A-Za-z]{2}$/;
+                if (!filter.test(code.value)) {
+                  document.getElementById("codeError").innerHTML =
+                    "Please enter valid Postal Code";
+                  code.style = "box-shadow: 0 0 5px 1px red";
+                  checkPostalCode = false;
+                  return false;
+                } else {
+                  code.setCustomValidity("");
+                  code.style = "box-shadow: none";
+                  checkPostalCode = true;
+                  return true;
+                }
+              }
+              function InvalidPostal(textbox) {
+                if (textbox.value === "") {
+                  textbox.setCustomValidity("Required Postal code");
+                  textbox.style = "box-shadow: 0 0 5px 1px red";
+                  invalidPostal = false;
+                  return false;
+                } else {
+                  textbox.setCustomValidity("");
+                  textbox.style = "box-shadow: none";
+                  invalidPostal = true;
+                  return true;
+                }
+              }
+            </script>
+          </div>
+        </div>
+        <% if(post.postTypes == "Event" ){ %>
+        <div class="form-group">
+          <label for="desc"
+            ><b>Promotion Duration * (FORMAT : 01-01-2000 12:12 AM)</b></label
+          >
+          <p>
+            Starts<input
+              type="datetime-local"
+              placeholder="13 july 2016"
+              class="form-control"
+			  id="promotionDurationStart"
+              value="<%= post.fromDate %>"
+              name="FromDate"
+              oninvalid="InvalidDateTime(this);"
+              oninput="InvalidDateTime(this);"
+              required
+              onchange="Javascript:CheckStartDateTime(this);"
+            />
+          </p>
+          <p>
+            Ends<input
+              type="datetime-local"
+              placeholder="13 july 2016"
+              class="form-control"
+			  id="promotionDurationEnd"
+              value="<%= post.toDate %>"
+              name="ToDate"
+              oninvalid="InvalidDateTime(this);"
+              oninput="InvalidDateTime(this);"
+              required
+              onchange="Javascript:CheckEndDateTime(this);"
+            />
+          </p>
+          <script>
+            function CheckStartDateTime(dateTimeVal) {
+              popUpWarning = true;
+              var curDateTime = new Date(dateTimeVal.value);
+
+              if (!isNaN(curDateTime.getDate()) === false) {
+                dateTimeVal.setCustomValidity(
+                  "Required Post date and time. (FORMAT : 01-01-2000 12:12 AM)"
+                );
+                dateTimeVal.style = "box-shadow: 0 0 5px 1px red";
+                checkStartDateTime = false;
+                return false;
+              } else {
+                dateTimeVal.setCustomValidity("");
+                dateTimeVal.style = "box-shadow: none";
+                checkStartDateTime = true;
+                return true;
+              }
+            }
+            function CheckEndDateTime(dateTimeVal) {
+              popUpWarning = true;
+              var curDateTime = new Date(dateTimeVal.value);
+
+              if (!isNaN(curDateTime.getDate()) === false) {
+                dateTimeVal.setCustomValidity(
+                  "Required Post date and time. (FORMAT : 01-01-2000 12:12 AM)"
+                );
+                dateTimeVal.style = "box-shadow: 0 0 5px 1px red";
+                checkEndDateTime = false;
+                return false;
+              } else {
+                dateTimeVal.setCustomValidity("");
+                dateTimeVal.style = "box-shadow: none";
+                checkEndDateTime = true;
+                return true;
+              }
+            }
+            function InvalidDateTime(dateTime) {
+              var curDateTime = new Date(dateTime.value);
+
+              if (dateTime.value === "") {
+                dateTime.setCustomValidity(
+                  "Required Post date and time. (FORMAT : 01-01-2000 12:12 AM)"
+                );
+                dateTime.style = "box-shadow: 0 0 5px 1px red";
+                invalidDateTime = false;
+                return false;
+              } else if (!isNaN(curDateTime.getDate()) === false) {
+                dateTime.setCustomValidity(
+                  "Required Post date and time. (FORMAT : 01-01-2000 12:12 AM)"
+                );
+                dateTime.style = "box-shadow: 0 0 5px 1px red";
+                invalidDateTime = false;
+                return false;
+              } else {
+                dateTime.setCustomValidity("");
+                dateTime.style = "box-shadow: none";
+                invalidDateTime = true;
+                return true;
+              }
+            }
+          </script>
+        </div>
+        <%} %>
+        <div class="form-group">
+          <div
+            class="card"
+            style=" border: 1px solid silver;border-radius: 5px;padding:5px"
+          >
+            <label for="Image" style="width:50%;"
+              ><b
+                >Add Photos.
+                <img
+                  src="https://img.icons8.com/ios/20/000000/about-filled.png"
+                  data-toggle="tooltip"
+                  title="Image Size should be MIN(335x600 pixels) and MAX(675x1200)!"/></b
+            ></label>
+            <div style="background-color: #c3bbbb;float: right;">
+              <% if(postFiles && postFiles.length > 0) { postFiles.forEach(
+              postFile => { %>
+              <img
+                id="outputGallery"
+                src="<%= postFile.gallery %>"
+                height="50"
+              />
+              <% }); } %>
+            </div>
+            <input
+              type="file"
+              name="gallery"
+              id="gallery"
+              multiple
+              onchange="Javascript:CheckGalleryImage(event);"
+              oninvalid="InvalidFile(this);"
+              oninput="InvalidFile(this);"
+            />
+            <p id="fileError_gallery" class="error-message"></p>
+            <script>
+              function CheckGalleryImage(event) {
+                popUpWarning = true;
+                document.getElementById("fileError_gallery").innerHTML = "";
+                var file = document.getElementById("gallery");
+                var filter = /\.(jpe?g|png|gif|bmp|svg)$/i;
+                if (!filter.test(file.value)) {
+                  document.getElementById("fileError_gallery").innerHTML =
+                    "Please select a valid image or file";
+                  file.style = "box-shadow: 0 0 5px 1px red";
+                  checkGalleryImage = false;
+                  return false;
+                } else {
+                  file.setCustomValidity("");
+                  file.style = "box-shadow: none";
+                }
+                var fileLists = event.target.files;
+                var checkCount = 0;
+                Array.from(fileLists).forEach(item => {
+                  var image = new Image();
+                  image.src = URL.createObjectURL(item);
+                  image.onload = function() {
+                    var height = this.naturalHeight;
+                    var width = this.naturalWidth;
+                    if (
+                      (height < 335 || height > 675) &&
+                      (width < 600 || width > 1200)
+                    ) {
+                      checkCount++;
+                    }
+                    if (checkCount > 0) {
+                      document.getElementById("fileError_gallery").innerHTML =
+                        "Uploaded Gallery image should be MIN(335x600 pixels) and MAX(675x1200)";
+                      file.style = "box-shadow: 0 0 5px 1px red";
+                      checkGalleryImage = false;
+                      return false;
+                    } else {
+                      file.setCustomValidity("");
+                      file.style = "box-shadow: none";
+                      checkGalleryImage = true;
+                      return true;
+                    }
+                  };
+                });
+              }
+            </script>
+          </div>
+        </div>
+
+        <% if( post.postTypes == "Training" ){ %>
+        <div class="form-group">
+          <label for="desc"
+            ><b> Duration : (FORMAT : 01-01-2000 12:12 AM)</b></label
+          >
+          <p>
+            Starts<input
+              type="datetime-local"
+              placeholder="13 july 2016"
+              class="form-control"
+              value="<%= post.fromDate %>"
+              name="FromDate"
+              oninvalid="InvalidDateTime(this);"
+              oninput="InvalidDateTime(this);"
+              required
+              onchange="Javascript:CheckStartDateTime(this);"
+            />
+          </p>
+          <p>
+            Ends<input
+              type="datetime-local"
+              placeholder="13 july 2016"
+              class="form-control"
+              value="<%= post.toDate %>"
+              name="ToDate"
+              oninvalid="InvalidDateTime(this);"
+              oninput="InvalidDateTime(this);"
+              required
+              onchange="Javascript:CheckEndDateTime(this);"
+            />
+          </p>
+        </div>
+        <div class="form-group">
+          <label for="name"><b>Payment terms : </b></label>
+          <input
+            type="text"
+            class="form-control"
+            name="Paymentterms"
+            autocomplete="off"
+            onchange="popUpWarning = true;"
+          />
+        </div>
+        <%} %>
+       <% if(post.ssgroupId == null){ %>
+          <div class="form-group">
+
+          </div>
+
+        <% } else if(userCredentials.length >0 ){ %>
+        <div class="form-group">
+          <b> Credential Offered? </b> <br />
+          Yes
+          <input
+            type="radio"
+            onclick="javascript:yesnoCheck();"
+            value="true"
+            name="CredentialOffer"
+            id="yesCheck"
+          />
+          No
+          <input
+            type="radio"
+            onclick="javascript:yesnoCheck();"
+            value="false"
+            name="CredentialOffer"
+            id="noCheck"
+          /><br />
+        </div>
+        <% } else{ %>
+
+          <div class="form-group">
+            <b> Credential Offered? </b> <br />
+            <input type="radio" data-toggle="modal" data-target="#myModal" > Yes
+            <input type="radio" value="false" name="CredentialOffer" onchange="popUpWarning = true;" > No
+            
+            <div class="modal fade" id="myModal" role="dialog">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-body">
+                      <p> Your group does not have any credentials available, would you like to create one now?</p>
+                        <div class="model-buttons" style="text-align: center;">
+                          <button type="button" style="width: 100px;" onclick="javascript:myfunction();"><a href="/credentials/<%=userId%>">Yes</a></button>                     
+                          <button type="button" style="width: 100px;"><a href="" onclick="javascript:myfunction();">No,Thanks</a></button>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+
+
+        <% } %>
+        <div id="ifYes" style="display:none">
+          <script type="text/javascript">
+            function yesnoCheck() {
+              popUpWarning = true;
+              if (document.getElementById("yesCheck").checked) {
+                document.getElementById("ifYes").style.display = "block";
+                document.getElementById("CredentialName").required = true;
+                document.getElementById(
+                  "CredentialDescription"
+                ).required = true;
+                document.getElementById("CredentialSkill").required = true;
+                document.getElementById("ClaimCode").required = true;
+              } else {
+                document.getElementById("ifYes").style.display = "none";
+                document.getElementById("CredentialName").required = false;
+                document.getElementById(
+                  "CredentialDescription"
+                ).required = false;
+                document.getElementById("CredentialSkill").required = false;
+                document.getElementById("ClaimCode").required = false;
+              }
+            }
+            function expirationCheck() {
+              popUpWarning = true;
+              if (document.getElementById("yesCheckExpiration").checked) {
+                document.getElementById("ifYesExpiration").style.display =
+                  "block";
+                document.getElementById("ExpirationDate").required = true;
+              } else {
+                document.getElementById("ifYesExpiration").style.display =
+                  "none";
+                document.getElementById("ExpirationDate").required = false;
+              }
+            }
+          </script>
+          <div class="form-group">
+              <label for="profile links"><b>Attach a Credential : </b></label>
+              <select class="form-control" id="attachCredential" name="credentialId" onchange="popUpWarning = true;">
+                <option value="<%= post.userCredentialId %>"></option>
+                <% if(userCredentials && userCredentials.length >= 0) { userCredentials.forEach( createdCredential => {
+                %>
+    
+                <option value="<%= createdCredential.id %>"><%= createdCredential.credentialName %></option>
+                <% }); } else { %>
+                <input  type="text"/>
+                <% } %>
+              </select>
+          </div>
+      
+          <div class="form-group">
+            <label for="name"><b> Demonstrated Skills* : </b></label>
+            <input
+              type="text"
+              class="form-control"
+              id="CredentialSkill"
+              value="<%= post.credentialSkill %>"
+              name="CredentialSkill"
+              autocomplete="off"
+              onchange="popUpWarning = true;"
+            />
+          </div>
+          <div class="form-group">
+            <b> Expiration? </b> <br />
+            Yes
+            <input
+              type="radio"
+              onclick="javascript:expirationCheck();"
+              value="true"
+              name="CredentialExpiration"
+              id="yesCheckExpiration"
+            />
+            No
+            <input
+              type="radio"
+              onclick="javascript:expirationCheck();"
+              value="false"
+              name="CredentialExpiration"
+              id="noCheckExpiration"
+            />
+          </div>
+          <div id="ifYesExpiration" style="display:none">
+            <div class="form-group">
+              <label for="expiration"><b> Expiration Date : </b></label>
+              <% if(post.expirationDate === null) { %>
+              <input
+                type="date"
+                class="form-control input-size"
+                placeholder="MM/DD/YYYY"
+                id="ExpirationDate"
+                name="ExpirationDate"
+                onchange="popUpWarning = true;"
+              />
+              <% } else { %>
+              <input
+                type="date"
+                class="form-control input-size"
+                value="<%=moment(post.expirationDate).format( 'MMM-DD-YYYY') %>"
+                id="ExpirationDate"
+                placeholder="MM/DD/YYYY"
+                name="ExpirationDate"
+                onchange="popUpWarning = true;"
+              />
+              <% } %>
+            </div>
+          </div>
+        </div>
+        <%} %>
+        <div class="form-group hidden">
+          <input type="text" value="<%=post.postTypes%>" name="PostType" />
+        </div>
+        <div class="form-group input-align">
+          <button type="submit" class="btn sign-btn" id="editPostBtn">
+            Save
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    window.onbeforeunload = function(e) {
+			if(popUpWarning){
+				localStorage.clear();
+				return e.returnValue = 'If you leave this page, Changes may not be saved.';
+				}
+		};
+    function ValidationEvent() {
+      window.onbeforeunload = null;
+
+      if (!validatePostName && validatePostName !== undefined) {
+        return false;
+      } else if (!invalidPost && invalidPost !== undefined) {
+        return false;
+      } else if (!checkProfileURL && checkProfileURL !== undefined) {
+        return false;
+      } else if (!checkPostEditImage && checkPostEditImage!== undefined) {
+        return false;
+      } else if (!invalidFile && invalidFile!== undefined) {
+        return false;
+      } else if (!invalidDesc && invalidDesc!== undefined) {
+        return false;
+      } else if (!checkProfileURL && checkProfileURL!== undefined) {
+        return false;
+      } else if (!checkJobURL && checkJobURL!== undefined) {
+        return false;
+      } else if (!checkPostalCode && checkPostalCode!== undefined) {
+        return false;
+      } else if (!invalidPostal && invalidPostal!== undefined) {
+        return false;
+      } else if (!checkStartDateTime && checkStartDateTime!== undefined) {
+        return false;
+      } else if (!checkEndDateTime && checkEndDateTime!== undefined) {
+        return false;
+      } else if (!invalidDateTime && invalidDateTime!== undefined) {
+        return false;
+      } else if (!checkGalleryImage && checkGalleryImage!== undefined) {
+        return false;
+      } else {
+		    localStorage.clear();
+        return true;
+      }
+    }
+  </script>
+  <script>
+        function myfunction(){
+          debugger;
+          window.onbeforeunload = null;
+          saveValue(this);
+        }
+        
+        function saveValue(item_ids) {
+          if(document.getElementById('attach_profile') !== null){
+            var attachProfile = document.getElementById('attach_profile').value;
+
+          var items = {
+            name: document.getElementById("postName").value,
+            event_url: document.getElementById("profileUrlCheck").value,
+            // post_image: document.getElementById("postimage").value,
+            Attach_Profile: attachProfile,
+            description: document.getElementById("post_description").value,
+            Web_url: document.getElementById("profileUrlCheck").value,
+            Ticket_Url: document.getElementById("jobUrlCheck").value,
+            // Gallery: document.getElementById("gallery").value,
+            Address: document.getElementById("address").value,
+            Address2: document.getElementById("address2").value,
+            City: document.getElementById("city").value,
+            Province: document.getElementById("province").value,
+            Country: document.getElementById("country").value,
+            Postal_Code: document.getElementById("postalcodecheck").value,
+            // Promotion_D_Start: document.getElementById("promotionDurationStart").value,
+            // Promotion_D_End: document.getElementById("promotionDurationEnd").value,
+            Attach_Credential: document.getElementById("attachCredential").value,
+            Credential_Skill: document.getElementById("CredentialSkill").value,
+            // Expiration_Date: document.getElementById("expirationDate").value
+          };
+        }else{
+          var items = {
+            name: document.getElementById("postName").value,
+            event_url: document.getElementById("profileUrlCheck").value,
+            // post_image: document.getElementById("postimage").value,
+            description: document.getElementById("post_description").value,
+            Web_url: document.getElementById("profileUrlCheck").value,
+            Ticket_Url: document.getElementById("jobUrlCheck").value,
+            // Gallery: document.getElementById("gallery").value,
+            Address: document.getElementById("address").value,
+            Address2: document.getElementById("address2").value,
+            City: document.getElementById("city").value,
+            Province: document.getElementById("province").value,
+            Country: document.getElementById("country").value,
+            Postal_Code: document.getElementById("postalcodecheck").value,
+            // Promotion_D_Start: document.getElementById("promotionDurationStart").value,
+            // Promotion_D_End: document.getElementById("promotionDurationEnd").value,
+            Attach_Credential: document.getElementById("attachCredential").value,
+            Credential_Skill: document.getElementById("CredentialSkill").value,
+            // Expiration_Date: document.getElementById("expirationDate").value
+          };
+        }
+          
+          localStorage.setItem('Post_Edit_Data_items', JSON.stringify(items));
+        }
+      var jsonData2 = JSON.parse(localStorage.getItem('Post_Edit_Data_items'));
+      if(jsonData2){
+        debugger;
+      document.getElementById("postName").value = jsonData2.name;
+			document.getElementById("profileUrlCheck").value = jsonData2.event_url;
+      // document.getElementById("postimage").value = jsonData2.post_image;
+
+      if(jsonData2.Attach_Profile){
+      // document.getElementById("attach_profile").value = jsonData2.Attach_Profile;	
+      document.getElementById('attach_profile').getElementsByTagName('option')[jsonData2.Attach_Profile].selected = 'selected';
+
+    }
+      
+			document.getElementById("post_description").value = jsonData2.description;
+			document.getElementById("profileUrlCheck").value = jsonData2.Web_url;
+			document.getElementById("jobUrlCheck").value = jsonData2.Ticket_Url;
+			// document.getElementById("gallery").value = jsonData2.Gallery;
+			document.getElementById("address").value = jsonData2.Address;
+			document.getElementById("address2").value = jsonData2.Address2;
+			document.getElementById("city").value = jsonData2.City;
+			document.getElementById("province").value = jsonData2.Province;
+			document.getElementById("country").value = jsonData2.Country;
+			document.getElementById("postalcodecheck").value = jsonData2.Postal_Code;
+			// document.getElementById("promotionDurationStart").value = jsonData2.Promotion_D_Start;
+			// document.getElementById("promotionDurationEnd").value = jsonData2.Promotion_D_End;
+			document.getElementById("attachCredential").value = jsonData2.Attach_Credential;
+			document.getElementById("CredentialSkill").value = jsonData2.Credential_Skill;
+			// document.getElementById("expirationDate").value = jsonData2.Expiration_Date;
+    }
+    </script>
+</html>

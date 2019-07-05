@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Sk-Sq-signup</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/group.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+    </head>
+    <body>
+        <div class="container-main">
+            <div class="row main-header">
+              <div class="col-md-12 col-sm-12 col-xs-12 bg-purple">     
+              <div class="container-first">  
+                  <a href="/index"><img src="/images/squirrel-logo.png" class="container-first-logo" style="display:inline"></a>                  
+                  <ul class="nav navbar-nav pull-right"> 
+                    <%if(userId > 0) { %>                     
+                    <li><a class="tab-pane"><i class="fa fa-compass" aria-hidden="true"></i> CAREER</a></li>
+                    <li><a <% if (current === 'home') { %>class="squirrel-active-tab" <% } %> href="/home/<%= userId %>" class="primary-lightGrey"><i class="fa fa-home" aria-hidden="true"></i> HOME</a></li>
+                    <li><a <% if (current === 'groups') { %>class="squirrel-active-tab" <% } %> href="/group/<%= userId %>" class="primary-lightGrey"><i class="fa fa-users" aria-hidden="true"> </i> GROUPS</a></li>
+                    <li><a class="tab-pane"><i class="fa fa-envelope"></i> MESSAGES</a></li>
+                    <li><a <% if (current === 'account') { %>class="squirrel-active-tab" <% } %>href="/account/<%= userId %>" class="primary-lightGrey"><i class="fa fa-user" aria-hidden="true"></i> ACCOUNT</a></li>
+                    <li><a <% if (current === 'credentials') { %>class="squirrel-active-tab" <% } %>href="/credentials/<%= userId %>" class="primary-lightGrey"><i class="fa fa-certificate" aria-hidden="true"></i> CREDENTIALS</a></li>
+                    <li><a href="/logout" class="primary-lightGrey"> LOG OUT</a></li>
+                    <li><a href="#Settings" class="primary-lightGrey"><i class="fa fa-cog" aria-hidden="true"></i></a></li>
+                    <li><a href="#Help" class="primary-lightGrey"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></a></li>
+                    <li style="padding-top: 10px;">
+                      <input type="text" placeholder="Search.." name="search">
+                      <button type="submit"><i class="fa fa-search"></i></button>          
+                  </li> 
+                  <% } else { %>
+
+                    <li><a class="tab-pane"><i class="fa fa-compass" aria-hidden="true"></i> CAREER</a></li>
+                    <li><a class="primary-lightGrey" data-toggle="modal" data-target="#myModal"><i class="fa fa-home" aria-hidden="true"></i> HOME</a></li>
+                    <li><a class="primary-lightGrey" data-toggle="modal" data-target="#myModal"><i class="fa fa-users" aria-hidden="true"> </i> GROUPS</a></li>
+                    <li><a class="primary-lightGrey" data-toggle="modal" data-target="#myModal"><i class="fa fa-envelope"></i> MESSAGES</a></li>
+                    <li><a class="primary-lightGrey" data-toggle="modal" data-target="#myModal"><i class="fa fa-user" aria-hidden="true"></i> ACCOUNT</a></li>
+                    <li><a class="primary-lightGrey" data-toggle="modal" data-target="#myModal"><i class="fa fa-certificate" aria-hidden="true"></i> CREDENTIALS</a></li>
+                    <li><a class="tab-pane"> LOG OUT</a></li>
+                    <li><a href="#Settings" class="primary-lightGrey"><i class="fa fa-cog" aria-hidden="true"></i></a></li>
+                    <li><a href="#Help" class="primary-lightGrey"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></a></li>
+                    <li style="padding-top: 10px;">
+                      <input type="text" placeholder="Search.." name="search">
+                      <button type="submit"><i class="fa fa-search"></i></button>          
+                  </li> 
+                  <div class="modal fade" id="myModal" role="dialog">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-body">
+                            <p> Would you like to create an Skill Squirrel account..? <a
+                                href="/index">Yes</a>/<a href="">No</a> </a> </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  <% }%>  
+                  </ul>
+                </div>     
+              </div>
+            </div>       
+          </div>
+    </head>
+    </body>         
+
+  

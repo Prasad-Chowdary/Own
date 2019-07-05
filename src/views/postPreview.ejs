@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Post-create</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+	<link rel="stylesheet" type="text/css" href="/css/account.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+	<script>
+		function sharePage(url) {
+			newwindow = window.open(url, "name", "height=350,width=400,scrollbars=yes");
+			if (window.focus) {
+				newwindow.focus();
+			}
+			return false;
+		}
+		$("document").ready(function () {
+			setTimeout(function () {
+				$("div.alert").remove();
+			}, 3000); // 5 secs
+
+		});
+		$(document).ready(function () {
+			// Configure/customize these variables.
+			var showChar = 300;  // How many characters are shown by default
+			var ellipsestext = "...";
+			var moretext = "Show more";
+			var lesstext = "Show less";
+			$('.more').each(function () {
+				var content = $(this).html();
+				if (content.length > showChar) {
+					var c = content.substr(0, showChar);
+					var h = content.substr(showChar, content.length - showChar);
+					var html = c + '<span class="moreellipses">' + ellipsestext + '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink">' + moretext + '</a></span>';
+					$(this).html(html);
+				}
+			});
+			$(".morelink").click(function () {
+				if ($(this).hasClass("less")) {
+					$(this).removeClass("less");
+					$(this).html(moretext);
+				} else {
+					$(this).addClass("less");
+					$(this).html(lesstext);
+				}
+				$(this).parent().prev().toggle();
+				$(this).prev().toggle();
+				return false;
+			});
+		});
+		if ( window.history.replaceState ) {
+		  window.history.replaceState( null, null, window.location.href );
+		 }
+	</script>
+</head>
+
+<body>
+	<% var current= 'account' %>
+	<%- include ./partials/head  %>
+
+	<form action="/account/<%= userId %>" style="margin-left: 400px; margin-right: 400px; margin-top:80px" method="POST"
+		id="cprfForm" enctype="multipart/form-data">
+		<input type="hidden" name="userId" value="<%=userId%>">
+
+		<% if (typeof postSuccessMessage != 'undefined' && postSuccessMessage) { %>
+		<div class="alert alert-success alert-dismissible" id="myAlert">
+			<a href="#" class="close">&times;</a>
+			<%- postSuccessMessage %></div>
+		<% }%>
+
+		<div class="col-md-12">
+			<div class="account-list-div image-post"><img src="<%= post.postThumnail %>" class="post-preview-img"></div>
+			<div class="post-image-desc">
+			 <h4><b><%= post.name %></b></h4>  	
+			 <%  if(profile != null){ %>
+				<h4><b><%= profile.name %></b></h4>
+		       <%  } %>
+				<h5><b><%= user.firstName%> <%=user.lastName %></b></h5>
+				<div class="post-image-desc">
+					<%if (post.eventUrl != null)  { %>
+					<h5><b></b><a href="<%= post.eventUrl %>" target="_blank"> <%= post.eventUrl %></a></h5>
+					<%  } %>
+				</div>
+				<%if (post.reserveTicketUrl != null)  { %>
+				<h5><b> Tickets: </b><a href="<%= post.reserveTicketUrl %>" target="_blank">
+						<%= post.reserveTicketUrl %> </a> </h5>
+				<%  } else if (post.jobPostingUrl !=null){ %>
+				<p>
+					<h5><b>Job Posting : </b><a href="<%= post.jobPostingUrl %>"
+							target="_blank"><%= post.jobPostingUrl %></a></h5>
+				</p>
+				<%  }  %>
+
+			</div>
+		</div>
+		<div class="col-md-12">
+				<a href="javascript:void(0)" onclick="sharePage('https://www.linkedin.com/shareArticle?mini=true&url=<%= shareLink %>');"
+					title="Linkedin Share" target="_blank" class="fa fa fa-linkedin" aria-hidden="true"
+					style="float: right;margin-left: 30px">
+				</a>
+	
+				<a href="javascript:void(0)" onclick="sharePage('https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=&su=<%= post.name %>&body= Please check out this link <%= shareLink %>&ui=2&tf=1&pli=1');" title="Email Share"
+					target="_blank" class="fa fa-envelope fa-share" aria-hidden="true" style="float: right;margin-left: 30px">
+				</a>
+	
+				<a href="javascript:void(0)" data-vars-storyid="1555635877747" data-vars-icontype="facebook"
+					onclick="sharePage('https://www.facebook.com/sharer/sharer.php?t=<%= post.name %>&u=<%= shareLink %>');" title="Facebook Share"
+					class="fa fa-facebook" aria-hidden="true" style="float: right;margin-left: 30px"></a>
+	
+				<a href="javascript:void(0)" data-vars-icontype="twitter" data-vars-storyid="1555635877747"
+					onclick="sharePage('https://twitter.com/share?url=<%= shareLink %>&text=@<%= post.name %>,  @<%= post.hashTag %>. Please check out this link ');" title="Tweet" class="fa fa-twitter"
+					aria-hidden="true" style="float: right;margin-left: 30px"></a>
+		</div>
+		</div>
+		<div class="col-md-12">
+			<h4>
+				<p class="more"><%= post.postDescription %> </p>
+			</h4>
+		</div>
+		<%if (post.credentialOffer == true)  { %>
+			<h4><b style="padding-left: 12px;"> Credential Information :</b></h4>
+			<div class="col-md-12">
+				<h4><b><%= attachedcredentials.credentialName%></b></h4>
+				<h4><b> Skills : </b><%= post.credentialSkill%> </h4>
+				<%if (post.expirationDate != null)  { %>
+				<h4><b> Expiry : </b><%=moment(post.expirationDate).format( 'MMM-DD-YYYY') %></h4>
+				<% } else { %>
+				<h4><b> Expiry : </b> None</h4>
+				<% } %>
+				<%if (attachedcredentials.credentialImage != null)  { %>
+				<h4><b> CredentialImage :</b> <img src="<%= attachedcredentials.credentialImage %>" height="100"> </h4>
+				<% } %>
+				<h4><b> Description : </b>
+					<p class="more"> <%= attachedcredentials.credentialDescription %> </p>
+				</h4>
+			</div>
+			<% } %>
+		<input type="submit" value="Submit" style="margin-top: 20px;">
+		<input type="button" value="Edit" style="margin-left:100px" onclick="location.href='/edit-post/<%=post.id%>'" />
+	</form>
+</body>
+
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" type="text/css" href="/css/group.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+    <% var current= 'groups' %>
+    <%- include ./partials/head  %>
+
+    <form>
+        <div class="tab-content" style="padding: 50px">
+        <!-- flash message -->
+            <div class="alert alert-success alert-dismissible" id="myAlert" hidden>
+                <a href="#" class="close" data-dismiss="alert">&times;</a>
+                <p id=mail_success></p>
+            </div>
+
+            <div class="profile-post-padding">
+                <div class="grp-image-left"><img src="<%= group.groupImage %>" class="group-preview-img"></div>
+                <div class="grp-image-desc">
+                    <div>
+                        <h4><b>Group Name : </b><%= group.name %></h4>
+                    </div>
+                </div>
+                <div>
+                    <p><h4><b>Group Description : </b><%= group.description %></h4></p>
+                </div>
+                <div class="post-image-desc">
+                    <%if (group.webSiteURL != null)  { %>
+                    <h5><b></b><a href="<%= group.webSiteURL %>" target="_blank"> <%= group.webSiteURL %> </a> </h5>
+                    <%  } %>
+                </div>
+                <% groupProfiles.forEach( profile => { 
+                    if(profile.isDraft === true){ %>
+                <div>
+                        <% if(group.ownerId === parseInt(userId)){ %>
+                            <h4><b>Contact Group Manager : </b><%= profile.name %> </h4>
+                        <% }else { %>
+                           <h4> <a onclick="contact_group_manager()"> <b>Contact Group Manager : </b><%= profile.name %></a></h4>
+                        <% } %>
+                    <script>
+                        function contact_group_manager(){
+                            var data={
+                                from_mail_id:'<%= user.email %>',
+                                to_id:'<%= group.ownerId %>',
+                                subject:'<%= user.firstName%> <%= user.lastName %> is showing interest on your group',
+                                mail_body:'<%= user.firstName%> <%= user.lastName %> is interested to join <%= group.name %>.'
+                            }
+                            $.ajax({
+                                url: 'contact_manager/<%= userId %>/<%= group.id %>',
+                                type: 'post',
+                                dataType: 'json',
+                                data: data,
+                                success: function (response) {
+                                    debugger;
+                                    console.log(response);
+                                    if(reponse.info.message === "success"){
+                                        $('#myAlert').show();
+                                        $('#mail_success').text(response.flashMessage[0]);
+                                        setTimeout( function(){$('#myAlert').hide();} , 2000);
+                                    }
+                                },
+                            });
+                        }
+                    </script>
+                        
+                </div>
+                <%  }  }); 
+                if(group.groupType === "close" ){ %>
+
+                    <h4><b>Criteria for joining group : </b><%= group.groupJoinCriteria %> </h4>
+                <% } %>
+             <div class="account-create-div">
+                <% if (user.isGuest === true){ %>   
+                    <a href="" class="account-create" data-toggle="modal" data-target="#discover">
+                            <h4><b>Join-Group</b></h4></a>             
+                    <div class="modal fade" id="discover" role="dialog">
+                        <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                            <p> Only account holders may allowed to join groups, would you like to create an account now?</p>
+                                <div class="model-buttons" style="text-align: center;">
+                                <button type="button" style="width: 100px;"><a href="/signup">Yes</a></button>                     
+                                <button type="button" style="width: 100px;"><a href="">No,Thanks</a></button>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    <% } else { %>
+                    <a href="/join-GroupService/<%= userId %>/<%= groupId %>" class="account-underlist"
+                            style="color: red">
+                            <h4><b>Join-Group</b></h4>
+                        </a>
+                    <% } %>                         
+             </div>
+            </div>
+        </div>
+    </form>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>group-page</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="css/group.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+</head>
+<body>  
+<div class="container-main">
+  <div class="row main-header">
+    <div class="col-md-12 col-sm-12 col-xs-12 bg-purple">     
+    <div class="container-first">  
+        <img src="images/squirrel-logo.png" class="container-first-logo" style="display:inline">        
+        <ul class="nav navbar-nav pull-right">             
+          <li><a href="#Career" class="primary-lightGrey"><i class="fa fa-compass" aria-hidden="true"></i> CAREER</a></li>
+          <li><a href="#Opportunities" class="primary-lightGrey"><i class="fa fa-user"></i> OPPORTUNITIES</a></li>
+          <li><a href="group" class="primary-lightGrey"><i class="fa fa-users" aria-hidden="true"> </i> GROUPS</a></li>
+          <li><a href="#Messages" class="primary-lightGrey"><i class="fa fa-envelope"></i> MESSAGES</a></li>
+          <li><a href="accounts.html" class="primary-lightGrey"><i class="fa fa-user" aria-hidden="true"></i> ACCOUNT</a></li>
+          <li><a href="#Settings" class="primary-lightGrey"><i class="fa fa-cog" aria-hidden="true"></i></a></li>
+          <li><a href="#Help" class="primary-lightGrey"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></a></li>
+          <li style="padding-top: 10px;">
+            <input type="text" placeholder="Search.." name="search">
+            <button type="submit"><i class="fa fa-search"></i></button>          
+        </li>   
+        </ul>
+      </div>     
+      </div>
+    </div>       
+   </div>
+     <div class="container account-contain profile-post-padding" >
+          <ul class="nav nav-tabs ">
+              <li class="active account-tab-li"><a data-toggle="tab" href="#contacts">Contacts</a></li>
+              <li class="account-tab-li"><a data-toggle="tab" href="#groups">Groups</a></li>    
+          </ul>
+     <div class="tab-content">
+    <div id="contacts" class="tab-pane fade in active">
+      <br><div>
+        <ul class="nav nav-tabs">
+          <li class="active"><a data-toggle="tab" href="#bookmarks">Bookmarks</a></li>
+          <li><a data-toggle="tab" href="#following">Following</a></li>
+        </ul>
+      </div>
+      <div class="tab-content">
+        <div id="bookmarks" class="tab-pane fade in active">
+          <br>
+           <div class="form-group has-feedback has-search">
+              <span class="glyphicon glyphicon-search form-control-feedback"></span>
+              <input type="text" class="form-control" placeholder="Search">
+           </div>
+          <ul class="list-group account-underlist">
+          <li class="list-group-item">
+            <div class="account-list-div"><img src="images/humaneye.jpg" class="profile-img"></div>
+            <div class="account-list-grp-title">
+               <div> <h4>Film Critique & Editing</h4> </div>
+               <div>               
+                  <div> Natasha's Critical Eye</div>
+                  <div> I'm done revewing your film now</div>
+               </div>
+            </div>
+            <div class="account-list-div toggle-align"> 
+              <div>bookmarks</div>
+              <div><img src="images/smallreelimg.svg"></div>
+            </div>
+          </li>
+        </ul> 
+        </div>      
+        <div id="following" class="tab-pane fade">
+          <br>
+           <div class="form-group has-feedback has-search">
+              <span class="glyphicon glyphicon-search form-control-feedback"></span>
+              <input type="text" class="form-control" placeholder="Search">
+           </div>           
+           <ul class="list-group account-underlist">
+          <li class="list-group-item">
+            <div class="account-list-div"><img src="images/humaneye.jpg" class="profile-img"></div>
+            <div class="account-list-grp-title">
+               <div> <h4>Film Critique & Editing</h4> </div>
+               <div>               
+                  <div> Natasha's Critical Eye</div>
+                  <div> I'm done revewing your film now</div>
+               </div>
+            </div>
+            <div class="account-list-div toggle-align"> 
+              <div>following</div>
+              <div><img src="images/smallreelimg.svg"></div>
+            </div>
+          </li>
+        </ul> 
+        </div>
+      </div>   
+      </div>    
+     <div id="groups" class="tab-pane fade">
+        <br><div>
+          <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#mygroup">My Groups</a></li>
+            <li><a data-toggle="tab" href="#discover">Discover</a></li>
+          </ul>
+      </div>
+      <div class="tab-content">
+      <div id="mygroup" class="tab-pane fade in active">
+        <div class="group-create-div">
+            <a class="group-create" href="create-group.html"> <h4>Create </h4> </a> 
+        </div>
+         <ul class="list-group account-underlist">
+          <li class="list-group-item">
+            <div class="account-list-div"><img src="images/workinculture.png" class="profile-img"></div>
+            <div class="account-list-grp-title">
+               <div> <h4>WorkInCulture</h4> </div>
+               <div>
+                  <p> Our vision is a robust and resilient <br> Ontario cultural sector</p>
+               </div>
+            </div>
+            <div class="account-list-div"> 
+              <p align="right">
+                <input type="button" value="Manage" class="manage-button">
+              </p>
+            </div>
+          </li>
+         <li class="list-group-item">
+            <div class="account-list-div"><img src="images/interactive.png" class="profile-img"></div>
+            <div class="account-list-grp-title">
+               <div> <h4>Interactive Ontario</h4> </div>
+               <div>
+                  <p> A voice of interactive digital media</p>
+               </div>
+            </div>
+          </li> 
+          <li class="list-group-item">
+            <div class="account-list-div"><img src="images/artandscope.png" class="profile-img"></div>
+            <div class="account-list-grp-title">
+               <div> <h4>Artscape Daniels Lunchpad</h4> </div>
+               <div>
+                  <p> 30,000 square-foot, one-stop art and design enterpreneurship hub</p>
+               </div>
+            </div>
+          </li>
+      </ul> 
+      </div> 
+     <div id="discover" class="tab-pane fade">
+        <br>           
+        <div class="form-group form-inline has-feedback has-search">
+          <span class="glyphicon glyphicon-search form-control-feedback"></span>
+         <span> <input type="text" class="form-control" placeholder="Search">
+          <button type="submit"><i class="fa fa-crosshairs"></i></button></span>
+        </div>
+
+      <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo">Simple collapsible</button>
+        <div id="demo" class="collapse">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+          sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        </div>
+
+        <ul class="list-group account-underlist">
+          <li class="list-group-item"  data-toggle="list" href="#list-home" style="min-height: 100px;">
+            <div class="account-list-div"><img src="images/humaneye.jpg" class="profile-img"></div>
+            <div class="account-list-grp-title">
+               <div> <h4>Film Critique & Editing</h4> </div>
+               <div>               
+                  <div> Natasha's Critical Eye</div>
+                  <div> I'm done revewing your film now</div>
+               </div>
+            </div>
+          </li>
+      </ul> 
+      </div>
+    </div>   
+    </div> 
+  </div>
+</div>
+</body>
+</html>
