@@ -3,7 +3,7 @@ const UserModel = require('./models/user')
 const BlogModel = require('./models/blog')
 const TagModel = require('./models/tag')
 
-const sequelize = new Sequelize('socialnetwork', 'root', 'klprasad@123', {
+const sequelize = new Sequelize('socialnetwork', 'root', 'ipsg', {
   host: 'localhost',
   dialect: 'mysql',
   pool: {
