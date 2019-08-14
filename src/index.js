@@ -54,44 +54,44 @@ const profileRoutes = require('./routes/profile')(User,Profile, PostType,Post,Gr
 // const certificateRoutes = require('./controllers/certificates')(Group);
 const credentialsRoutes = require('./routes/credentials')(User,Post,Credential,UserCredential,Group);
 
-app.use('/admin', adminRoutes);
-app.use(userRoutes);
-app.use(groupRoutes);
-app.use(postRoutes);
-app.use(profileRoutes);
-// app.use(certificateRoutes);
-app.use(credentialsRoutes);
+// app.use('/admin', adminRoutes);
+// app.use(userRoutes);
+// app.use(groupRoutes);
+// app.use(postRoutes);
+// app.use(profileRoutes);
+// // app.use(certificateRoutes);
+// app.use(credentialsRoutes);
 
-app.use((req, res, next) => {
-    res.status(404).sendFile(path.join(rootDir, 'views', '404.html'));
-});
+// app.use((req, res, next) => {
+//     res.status(404).sendFile(path.join(rootDir, 'views', '404.html'));
+// });
  
 
-// Application constants
-var postTypeNames = ["Service","Rental","Event","Advisory","Training"];
+// // Application constants
+// var postTypeNames = ["Service","Rental","Event","Advisory","Training"];
 
-// Do the sync
+// // Do the sync
 
-  sequelize.sync({force : true}).then(result => {
- //   sequelize.sync().then(result => {
-        return PostType.findAll();   
-    }).then(postTypes => {
-        console.log("Found SOME post types 1 ");
-        if(!postTypes){
-            return createPostTypes(postTypeNames);
-        }
-        else if(postTypes.length == 0){
-            return createPostTypes(postTypeNames);
-        }
-        return postTypes;
-    }).then(postTypes => {
-        console.log("Found SOME post types 2");
-        // app.listen(3000);
-        // console.log("Started server on port 3000");
-        app.listen(global.gConfig.node_port, () => {
-            console.log(`${global.gConfig.app_name} listening on port ${global.gConfig.node_port}`);
-        });
-    })
-    .catch(err => {
-        console.log(err);
-    });
+//   // sequelize.sync({force : true}).then(result => {
+//   //  sequelize.sync().then(result => {
+//   //       return PostType.findAll();   
+//   //   }).then(postTypes => {
+//   //       console.log("Found SOME post types 1 ");
+//   //       if(!postTypes){
+//   //           return createPostTypes(postTypeNames);
+//   //       }
+//   //       else if(postTypes.length == 0){
+//   //           return createPostTypes(postTypeNames);
+//   //       }
+//   //       return postTypes;
+//   //   }).then(postTypes => {
+//   //       console.log("Found SOME post types 2");
+//   //       // app.listen(3000);
+//   //       // console.log("Started server on port 3000");
+//   //       app.listen(global.gConfig.node_port, () => {
+//   //           console.log(`${global.gConfig.app_name} listening on port ${global.gConfig.node_port}`);
+//   //       });
+//   //   })
+//   //   .catch(err => {
+//   //       console.log(err);
+//   //   });
