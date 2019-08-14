@@ -72,8 +72,8 @@ var postTypeNames = ["Service","Rental","Event","Advisory","Training"];
 
 // Do the sync
 
-//   sequelize.sync({force : true}).then(result => {
-   sequelize.sync().then(result => {
+  sequelize.sync({force : true}).then(result => {
+ //   sequelize.sync().then(result => {
         return PostType.findAll();   
     }).then(postTypes => {
         console.log("Found SOME post types 1 ");
