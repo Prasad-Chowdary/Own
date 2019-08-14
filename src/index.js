@@ -72,26 +72,26 @@ var postTypeNames = ["Service","Rental","Event","Advisory","Training"];
 
 // Do the sync
 
- //  sequelize.sync({force : true}).then(result => {
- // //   sequelize.sync().then(result => {
- //        return PostType.findAll();   
- //    }).then(postTypes => {
- //        console.log("Found SOME post types 1 ");
- //        if(!postTypes){
- //            return createPostTypes(postTypeNames);
- //        }
- //        else if(postTypes.length == 0){
- //            return createPostTypes(postTypeNames);
- //        }
- //        return postTypes;
- //    }).then(postTypes => {
- //        console.log("Found SOME post types 2");
- //        // app.listen(3000);
- //        // console.log("Started server on port 3000");
- //        app.listen(global.gConfig.node_port, () => {
- //            console.log(`${global.gConfig.app_name} listening on port ${global.gConfig.node_port}`);
- //        });
- //    })
- //    .catch(err => {
- //        console.log(err);
- //    });
+  sequelize.sync({force : true}).then(result => {
+ //   sequelize.sync().then(result => {
+        return PostType.findAll();   
+    }).then(postTypes => {
+        console.log("Found SOME post types 1 ");
+        if(!postTypes){
+            return createPostTypes(postTypeNames);
+        }
+        else if(postTypes.length == 0){
+            return createPostTypes(postTypeNames);
+        }
+        return postTypes;
+    }).then(postTypes => {
+        console.log("Found SOME post types 2");
+        // app.listen(3000);
+        // console.log("Started server on port 3000");
+        app.listen(global.gConfig.node_port, () => {
+            console.log(`${global.gConfig.app_name} listening on port ${global.gConfig.node_port}`);
+        });
+    })
+    .catch(err => {
+        console.log(err);
+    });
