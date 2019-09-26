@@ -14,15 +14,7 @@
       <%- profileSuccessMessage %></div>
     <% }%>
 
-    <ul class="nav nav-tabs ">
-      <% if(switchTab !== 'post'){ %>
-        <li class="active account-tab-li"><a data-toggle="tab" href="#profile">Profiles</a></li>
-        <li class="account-tab-li"><a data-toggle="tab" href="#post">Posts</a></li>
-      <% } else { %>
-        <li class="account-tab-li"><a data-toggle="tab" href="#profile">Profiles</a></li>
-        <li class="active account-tab-li"><a data-toggle="tab" href="#post">Posts</a></li>
-      <% } %>
-    </ul>
+   
     <div class="tab-content">
       <% if(switchTab !== 'post'){ %>
         <div id="profile" class="tab-pane fade in active">
